@@ -12,3 +12,4 @@ class IngredientInfo(models.Model):
     description = models.CharField(max_length=500, null=True)
     cost = models.CharField(max_length=150, null=True)
     comments = models.CharField(max_length=400, null=False)
+    dateAdded = models.DateTimeField(auto_now_add=True, null=False)
