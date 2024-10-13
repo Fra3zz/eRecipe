@@ -127,4 +127,38 @@ def ingredientInfoGetAddView(request):
             return Response(serilizedData.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+@api_view(["GET", "DELETE", "PUT", "PATCH"])
+def ingredientInfoUpdateView(request, pk):
+    if request.method == "GET":
+        try:
+            ingredientInfo = IngredientInfo.objects.get(pk=pk)
+        except IngredientInfo.DoesNotExist:
+            return Response({"error": "Ingredient info not found"}, status=status.HTTP_404_NOT_FOUND)
+        serilizedIngredientInfo = IngredientInfoSerilizer(ingredientInfo)
+        return Response(serilizedIngredientInfo.data, status=status.HTTP_200_OK)
+    elif request.method =="DELETE":
+        try :
+            ingredientInfo = IngredientInfo.objects.get(pk=pk)
+        except IngredientInfo.DoesNotExist:
+            return Response({"error": "Ingredient info not found"}, status=status.HTTP_404_NOT_FOUND)
+            
+        serilizedIngredientInfo = IngredientInfoSerilizer(ingredientInfo)
+        ingredientInfo.delete()
+        return Response({"message": "Ingredient info deleted"}, status=status.HTTP_200_OK)
+    elif (request.method == "PUT") or (request.method == "PATCH"):
+        try:
+            ingredientInfo = IngredientInfo.objects.get(pk=pk)
+        except IngredientInfo.DoesNotExist:
+            return Response({"error": "Ingredient info not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.method == "PUT":
+            # Full update (replace all fields)
+            serializer = IngredientInfoSerilizer(ingredientInfo, data=request.data)
+        else:
+            # Partial update (modify only specific fields)
+            serializer = IngredientSerilizer(ingredientInfo, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
         
