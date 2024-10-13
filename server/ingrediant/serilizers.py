@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Ingrediant, IngrediantInfo
+from .models import Ingredient, IngredientInfo
 
-class IngrediantSerilizer(serializers.Serializer):
+class IngredientSerilizer(serializers.ModelSerializer):
     class Meta:
-        model = Ingrediant
+        model = Ingredient
         fields = ["name"]
