@@ -4,9 +4,9 @@ from .views import getAdd, removeUpdate, ingredientInfoGetAddView, ingredientInf
 urlpatterns = [
     #Ingredients Model API Endpoints
     path("ingredient/", getAdd),
-    path("ingredient/update/<pk>", removeUpdate),
+    path("ingredient/update/<int:pk>", removeUpdate),
     
     #INgredientsInfo Model API Endpoints
     path("info/", ingredientInfoGetAddView),
-    path("info/update/<pk>", ingredientInfoUpdateView)
+    path("info/update/<int:pk>", ingredientInfoUpdateView)
 ]
