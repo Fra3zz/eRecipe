@@ -11,5 +11,5 @@ class IngredientInfo(models.Model):
     name = models.OneToOneField(Ingredient, on_delete=models.CASCADE, null=False)
     description = models.CharField(max_length=500, null=True)
     cost = models.CharField(max_length=150, null=True)
-    comments = models.CharField(max_length=400, null=False)
+    comments = models.CharField(max_length=400, null=True)
     dateAdded = models.DateTimeField(auto_now_add=True, null=False)
