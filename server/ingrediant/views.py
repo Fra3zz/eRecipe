@@ -15,7 +15,7 @@ import json
 def getIngrediant(request):
     if request.method == 'GET':
         ingredintData = Ingredient.objects.all()
-        serilizedIngrediants = IngredientSerilizer(ingredintData).data
+        serilizedIngrediants = IngredientSerilizer(ingredintData, many=True).data
         return Response(serilizedIngrediants)
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -26,4 +26,34 @@ def addIngrediant(request):
         serilizedData.save()
         return Response(serilizedData.data, status=status.HTTP_201_CREATED)
     return Response(serilizedData.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+@api_view(["DELETE"])
+def removeIngredient(request, pk):
+    try:
+        ingredient = Ingredient.objects.get(pk=pk)
+    except Ingredient.DoesNotExist:
+        return Response({"error": "Ingredient not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    ingredient.delete()
+    return Response({"message": "Ingredient deleted"}, status=status.HTTP_204_NO_CONTENT)
+
+@api_view(["PUT", "PATCH"])
+def updateIngrediant(request, pk):
+    try:
+        ingredient = Ingredient.objects.get(pk=pk)
+    except Ingredient.DoesNotExist:
+        return Response({"error": "Ingredient not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "PUT":
+        # Full update (replace all fields)
+        serializer = IngredientSerilizer(ingredient, data=request.data)
+    else:
+        # Partial update (modify only specific fields)
+        serializer = IngredientSerilizer(ingredient, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            
