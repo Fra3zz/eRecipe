@@ -1,11 +1,9 @@
 from django.shortcuts import render
-from .serilizers import IngredientSerilizer
+from .serilizers import IngredientSerilizer,IngredientInfoSerilizer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Ingredient
+from .models import Ingredient, IngredientInfo
 from rest_framework import status
-from rest_framework.parsers import JSONParser
-import json
 
 
 
@@ -56,8 +54,9 @@ def updateIngrediant(request, pk):
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
+#-----Ingredient Model views.
 
-
+#Takes a request and returns DB object response or adds to DB object accordingly.
 @api_view(["GET", "POST"])
 def getAdd(request):
     if request.method == 'GET':
@@ -73,6 +72,8 @@ def getAdd(request):
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
+
+#Takes a request and returns an update or delete response object. Updated DB accordingly.    
 @api_view(["DELETE", "PUT", "PATCH", "GET"])
 def removeUpdate(request, pk):
     if request.method == "DELETE":
@@ -105,3 +106,25 @@ def removeUpdate(request, pk):
         serializedIngredient = IngredientSerilizer(ingrediant)
         return Response(serializedIngredient.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+#----Ingredient Comments----
+
+@api_view(["GET", "POST"])
+def ingredientInfoGetAddView(request):
+    if request.method == "GET":
+        ingredientInfoData = IngredientInfo.objects.all()
+        serilizedData = IngredientInfoSerilizer(ingredientInfoData, many=True)
+        return Response(serilizedData.data, status=status.HTTP_200_OK)
+    elif request.method == "POST":
+        data = request.data
+        serilizedData = IngredientInfoSerilizer(data=data)
+        if serilizedData.is_valid():
+            serilizedData.save()
+            return Response(serilizedData.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serilizedData.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
