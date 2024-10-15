@@ -93,3 +93,56 @@ UPDATE
 }
 
 ```
+
+GET DELETE PUT <code>/api/recipe/recipes/update/{primary_key}</code>
+
+GET
+```json
+{
+    "name": "Noodles",
+    "description": "Poor noodles into water and done.",
+    "portion_size": "1/serving",
+    "id": 2
+}
+```
+
+DELETE
+```json
+{
+    "message": "Recipe was deleted."
+}
+```
+
+PUT
+```json
+{
+    "name": "Noodles",
+    "description": "Poor noodles into water and done.",
+    "portion_size": "1/serving",
+    "id": 2
+}
+
+```
+
+GET POST <code>/api/recipe/recipes/</code>
+
+GET
+```json
+{
+    "name": "Noodles",
+    "description": "Poor noodles into water and done.",
+    "portion_size": "1/serving",
+    "id": 2
+}
+```
+
+POST
+```json
+{
+    "name": "Noodles",
+    "description": "Poor noodles into water and done.",
+    "portion_size": "1/serving",
+    "id": 2
+}
+
+```
