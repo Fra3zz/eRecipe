@@ -4,11 +4,11 @@ from .views import getAddRecipeView, updateRecipeView, getAddRecipeIngredientsVi
 urlpatterns = [
     #Recipe Model API Endpoints
     path("recipes/", getAddRecipeView),
-    path("recipes/update/<int:pk>", updateRecipeView),
+    path("recipes/<int:pk>/update", updateRecipeView),
     
     #RecipeIngredientInfo Model API Endpoints
     path("ingredients/", getAddRecipeIngredientsView),
-    path("ingredients/update/<int:pk>", updateRecipeIngredientView),
+    path("ingredients/<int:pk>/update", updateRecipeIngredientView),
     path("recipe/<str:recipe_name>/ingredients/", getRecipeIngredientsByRecipeNameView)
     
 ]
