@@ -62,5 +62,14 @@ def getAddRecipeIngredients(request):
         recipeIngredients = RecipeIngredient.objects.all()
         serializedRecipeIngredients = recipeIngredientSerializer(recipeIngredients, many=True)  # Add many=True
         return Response(serializedRecipeIngredients.data, status=status.HTTP_200_OK)
+    elif request.method == "POST":
+        data = request.data
+        serializedData = recipeIngredientSerializer(data=data)
+        if serializedData.is_valid():
+            serializedData.save()
+            return Response(serializedData.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializedData.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
-        
