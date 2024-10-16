@@ -1,21 +1,23 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Recipe
-from .serilizers import recipeSerilizer
+from .models import Recipe, RecipeIngredient
+from .serilizers import recipeSerializer, recipeIngredientSerializer
 from rest_framework import status
 
 # Create your views here.
 
+
+#Recipe views
 @api_view(["GET", "POST"])
 def getAddRecipeView(request):
     if request.method == "GET":
         recipes = Recipe.objects.all()
-        serilizedRecipe = recipeSerilizer(recipes, many=True)
+        serilizedRecipe = recipeSerializer(recipes, many=True)
         return Response(serilizedRecipe.data, status=status.HTTP_200_OK)
     if request.method == "POST":
         data = request.data
-        serilizedData = recipeSerilizer(data=data)
+        serilizedData = recipeSerializer(data=data)
         if serilizedData.is_valid():
             serilizedData.save()
             return Response(serilizedData.data, status=status.HTTP_201_CREATED)
@@ -29,7 +31,7 @@ def updateRecipeView(request, pk):
             recipe = Recipe.objects.get(pk=pk)
         except:
             return Response({"error": "Ingredient not found"}, status=status.HTTP_404_NOT_FOUND)
-        newRecipeSerilized = recipeSerilizer(recipe, data=request.data)
+        newRecipeSerilized = recipeSerializer(recipe, data=request.data)
         if newRecipeSerilized.is_valid():
             newRecipeSerilized.save()
             return Response(newRecipeSerilized.data, status=status.HTTP_202_ACCEPTED)        
@@ -41,7 +43,7 @@ def updateRecipeView(request, pk):
             recipe = Recipe.objects.get(pk=pk)
         except:
             return Response({"error":"Recipe dose not exist."}, status=status.HTTP_404_NOT_FOUND)
-        serilizedRecipe = recipeSerilizer(recipe)
+        serilizedRecipe = recipeSerializer(recipe)
         return Response(serilizedRecipe.data, status=status.HTTP_200_OK)
     
     elif request.method == "DELETE":
@@ -51,4 +53,14 @@ def updateRecipeView(request, pk):
             return Response({"error":"Recipe dose not exist."}, status=status.HTTP_404_NOT_FOUND)
         recipe.delete()
         return Response({"message":"Recipe was deleted."}, status=status.HTTP_200_OK)
+    
+#Recipe ingrediant views
+
+@api_view(["GET", "POST"])
+def getAddRecipeIngredients(request):
+    if request.method == "GET":
+        recipeIngredients = RecipeIngredient.objects.all()
+        serializedRecipeIngredients = recipeIngredientSerializer(recipeIngredients, many=True)  # Add many=True
+        return Response(serializedRecipeIngredients.data, status=status.HTTP_200_OK)
+    
         
