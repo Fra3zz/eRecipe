@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .models import Recipe, RecipeIngredient
 from .serilizers import recipeSerializer, recipeIngredientSerializer
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -57,7 +58,7 @@ def updateRecipeView(request, pk):
 #Recipe ingrediant views
 
 @api_view(["GET", "POST"])
-def getAddRecipeIngredients(request):
+def getAddRecipeIngredientsView(request):
     if request.method == "GET":
         recipeIngredients = RecipeIngredient.objects.all()
         serializedRecipeIngredients = recipeIngredientSerializer(recipeIngredients, many=True)  # Add many=True
@@ -73,3 +74,39 @@ def getAddRecipeIngredients(request):
     else:
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
+@api_view(["GET", "DELETE", "PUT", "PATCH"])
+def updateRecipeIngredientView(request, pk):
+    recipeIngredient = RecipeIngredient.objects.get(pk=pk)
+
+    if request.method == "GET":
+        serializedRecipeIngredient = recipeIngredientSerializer(recipeIngredient)
+        return Response(serializedRecipeIngredient.data, status=status.HTTP_200_OK)
+
+    elif request.method == "DELETE":
+        recipeIngredient.delete()
+        return Response({"message":"Ingrediant removed from recipe"}, status=status.HTTP_204_NO_CONTENT)
+
+    elif request.method == "PUT":
+        data = request.data
+        serializedData = recipeIngredientSerializer(recipeIngredient, data=data)
+        if serializedData.is_valid():
+            serializedData.save()
+            return Response(serializedData.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializedData.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == "PATCH":
+        data = request.data
+        serializedData = recipeIngredientSerializer(recipeIngredient, data=data, partial=True)
+        if serializedData.is_valid():
+            serializedData.save()
+            return Response(serializedData.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializedData.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def getRecipeIngredientsByRecipeIdView(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    recipeIngredients = RecipeIngredient.objects.filter(recipe=recipe)
+    serializedRecipeIngredients = recipeIngredientSerializer(recipeIngredients, many=True)
+    return Response(serializedRecipeIngredients.data, status=status.HTTP_200_OK)
