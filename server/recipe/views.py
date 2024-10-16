@@ -105,8 +105,15 @@ def updateRecipeIngredientView(request, pk):
             return Response(serializedData.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
-def getRecipeIngredientsByRecipeIdView(request, recipe_id):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
+def getRecipeIngredientsByRecipeNameView(request, recipe_name):
+    # Get the Recipe object by its name, case-insensitive search to avoid case mismatch issues
+    recipe = get_object_or_404(Recipe, name__iexact=recipe_name)
+    
+    # Get all the RecipeIngredient objects related to the found recipe
     recipeIngredients = RecipeIngredient.objects.filter(recipe=recipe)
+    
+    # Serialize the RecipeIngredient objects
     serializedRecipeIngredients = recipeIngredientSerializer(recipeIngredients, many=True)
+    
+    # Return the serialized data
     return Response(serializedRecipeIngredients.data, status=status.HTTP_200_OK)

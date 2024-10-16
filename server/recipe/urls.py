@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import getAddRecipeView, updateRecipeView, getAddRecipeIngredientsView, updateRecipeIngredientView, getRecipeIngredientsByRecipeIdView
+from .views import getAddRecipeView, updateRecipeView, getAddRecipeIngredientsView, updateRecipeIngredientView, getRecipeIngredientsByRecipeNameView
 
 urlpatterns = [
     #Recipe Model API Endpoints
@@ -9,6 +9,6 @@ urlpatterns = [
     #RecipeIngredientInfo Model API Endpoints
     path("ingredients/", getAddRecipeIngredientsView),
     path("ingredients/update/<int:pk>", updateRecipeIngredientView),
-    path("recipe/<int:recipe_id>/ingredients/", getRecipeIngredientsByRecipeIdView)
+    path("recipe/<str:recipe_name>/ingredients/", getRecipeIngredientsByRecipeNameView)
     
 ]
