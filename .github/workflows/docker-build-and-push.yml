@@ -24,20 +24,20 @@ jobs:
         with:
           context: .
           push: false
-          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
-          cache-from: type=registry,ref=gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:latest
+          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/erecipe:${{ github.sha }}
+          cache-from: type=registry,ref=gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/erecipe:latest
           cache-to: type=inline
 
       - name: Run Django tests
         run: |
-          docker run --rm gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }} python server/manage.py test
+          docker run --rm gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/erecipe:${{ github.sha }} python server/manage.py test
 
       - name: Push Docker image to Gitea registry
         if: ${{ success() }}
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
+          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/erecipe:${{ github.sha }}
 
       - name: Notify on failure
         if: ${{ failure() }}
