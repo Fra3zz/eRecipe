@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
+          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/edesign:${{ github.sha }}
 
       # Step 7: Notify if there's a failure
       - name: Notify on failure
