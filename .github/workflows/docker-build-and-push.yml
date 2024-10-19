@@ -1,0 +1,38 @@
+name: Docker Build, Test, and Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Gitea Docker registry
+        run: echo "${{ secrets.GITEA_TOKEN }}" | docker login gitea.home.sdtechlabs.com -u ${{ secrets.GITEA_USERNAME }} --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build -t gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }} .
+
+      - name: Run Django tests
+        run: |
+          docker run --rm gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }} python server/manage.py test
+        continue-on-error: false
+
+      - name: Push Docker image to Gitea registry
+        if: ${{ success() }}
+        run: |
+          docker push gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
+
+      - name: Notify on failure
+        if: ${{ failure() }}
+        run: echo "Docker build or tests failed. Please check the logs."
