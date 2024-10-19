@@ -24,7 +24,7 @@ jobs:
         with:
           context: ./server/
           push: false
-          tags: eDesign:${{ github.sha }}
+          tags: edesign:${{ github.sha }}
 
       # Step 4: Run Django tests using the locally built image
       - name: Run Django tests
