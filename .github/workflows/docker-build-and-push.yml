@@ -37,7 +37,7 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./server/
           push: false
           tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
 
