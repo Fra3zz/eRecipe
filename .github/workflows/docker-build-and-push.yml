@@ -1,4 +1,4 @@
-name: Docker Build, Test, and Push
+name: Docker Build and Push
 
 on:
   push:
@@ -18,28 +18,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Step 3: Build Docker image but do not push yet
-      - name: Build Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./server/
-          push: false
-          tags: edesign:${{ github.sha }}
-
-      # Step 5: Log in to Gitea Docker registry (only if tests pass)
+      # Step 3: Log in to Gitea Docker registry
       - name: Log in to Gitea Docker registry
-        if: ${{ success() }}
         run: echo "${{ secrets.GITEA_TOKEN }}" | docker login gitea.home.sdtechlabs.com -u ${{ secrets.GITEA_USERNAME }} --password-stdin
 
-      # Step 6: Push Docker image to Gitea registry (only if tests pass)
-      - name: Push Docker image to Gitea registry
-        if: ${{ success() }}
+      # Step 4: Build and push Docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          push: true
-          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/edesign:${{ github.sha }}
-
-      # Step 7: Notify if there's a failure
-      - name: Notify on failure
-        if: ${{ failure() }}
-        run: echo "Docker build or tests failed. Please check the logs."
+          context: .  # Use current directory as the context
+          push: true  # Push the built image to the registry
+          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:latest  # Tag the image with 'latest'
