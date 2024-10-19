@@ -19,19 +19,25 @@ jobs:
       - name: Log in to Gitea Docker registry
         run: echo "${{ secrets.GITEA_TOKEN }}" | docker login gitea.home.sdtechlabs.com -u ${{ secrets.GITEA_USERNAME }} --password-stdin
 
-      - name: Build Docker image
-        run: |
-          docker build -t gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }} .
+      - name: Build Docker image with caching
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
+          cache-from: type=registry,ref=gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:latest
+          cache-to: type=inline
 
       - name: Run Django tests
         run: |
           docker run --rm gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }} python server/manage.py test
-        continue-on-error: false
 
       - name: Push Docker image to Gitea registry
         if: ${{ success() }}
-        run: |
-          docker push gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
 
       - name: Notify on failure
         if: ${{ failure() }}
