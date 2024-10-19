@@ -24,12 +24,12 @@ jobs:
         with:
           context: ./server/
           push: false
-          tags: my-django-app:${{ github.sha }}
+          tags: eDesign:${{ github.sha }}
 
       # Step 4: Run Django tests using the locally built image
       - name: Run Django tests
         run: |
-          docker run --rm my-django-app:${{ github.sha }} python server/manage.py test
+          docker run --rm ${{ github.sha }} python server/manage.py test
 
       # Step 5: Log in to Gitea Docker registry (only if tests pass)
       - name: Log in to Gitea Docker registry
