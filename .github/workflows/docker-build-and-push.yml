@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    labels: [Linux]
 
     steps:
       - name: Checkout repository
