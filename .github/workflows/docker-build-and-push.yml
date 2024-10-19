@@ -10,35 +10,51 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Gitea Docker registry
-        run: echo "${{ secrets.GITEA_TOKEN }}" | docker login gitea.home.sdtechlabs.com -u ${{ secrets.GITEA_USERNAME }} --password-stdin
+      # Step 3: Verify network connectivity to Gitea server (debug step)
+      - name: Test network connectivity to Gitea
+        run: |
+          echo "Testing network connectivity to Gitea..."
+          curl -v https://gitea.home.sdtechlabs.com
 
-      - name: Build Docker image with caching
+      # Step 4: Debug Gitea Username (ensure the secret is correct)
+      - name: Debug Gitea Username
+        run: echo "Logging in with username: ${{ secrets.GITEA_USERNAME }}"
+
+      # Step 5: Log in to Gitea Docker registry using secrets
+      - name: Log in to Gitea Docker registry
+        run: |
+          echo "${{ secrets.GITEA_TOKEN }}" | docker login gitea.home.sdtechlabs.com -u ${{ secrets.GITEA_USERNAME }} --password-stdin
+
+      # Step 6: Build Docker image
+      - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: false
-          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/erecipe:${{ github.sha }}
-          cache-from: type=registry,ref=gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/erecipe:latest
-          cache-to: type=inline
+          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
 
+      # Step 7: Run Django tests inside the Docker container
       - name: Run Django tests
         run: |
-          docker run --rm gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/erecipe:${{ github.sha }} python server/manage.py test
+          docker run --rm gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }} python server/manage.py test
 
+      # Step 8: Push Docker image to Gitea registry (only if tests pass)
       - name: Push Docker image to Gitea registry
         if: ${{ success() }}
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/erecipe:${{ github.sha }}
+          tags: gitea.home.sdtechlabs.com/${{ secrets.GITEA_USERNAME }}/my-django-app:${{ github.sha }}
 
+      # Step 9: Notify if there's a failure
       - name: Notify on failure
         if: ${{ failure() }}
         run: echo "Docker build or tests failed. Please check the logs."
