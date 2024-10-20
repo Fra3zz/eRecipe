@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route, Link} from "react-router-dom"
 import { Home } from "./Home/home"
-import GetIngredients from "./ingredient/IngredientsRequest"
+import GetIngredients from "./ingredients/IngredientsRequest"
 
 export default function ROUTES() {
 
