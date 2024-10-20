@@ -1,11 +1,11 @@
 import './App.css'
-import { GetIngredients } from "./components/ingredient/IngredientsRequest";
+import ROUTES from "./components/routes"
 
 function App() {
 
   return (
     <div>
-      <GetIngredients/>
+      <ROUTES />
     </div>
   )
 }

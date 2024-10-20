@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import IngredientList from "./Ingredients";
 import axios from 'axios';
 
-export function GetIngredients() {
+export default function GetIngredients() {
   const [ingredients, setIngredients] = useState([]);
   const [newIngredient, setNewIngredient] = useState('');
   const [error, setError] = useState(null);
