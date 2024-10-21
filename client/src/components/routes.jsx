@@ -10,13 +10,15 @@ export default function ROUTES() {
             <BrowserRouter>
                 <main>
                     <Routes> 
-                        <Route path="/" element = <Home/> />    {/*Home Page*/}
 
+                        {/*Home Page*/}
+                        <Route path="/" element = <Home/> />
 
+                        {/*Ingredient app */}
                         <Route path="/ingredients/" element = <GetIngredients/> /> {/* Ingredients Page: Add and View */}
-                        <Route path="/ingredients/update" element= <UpdateIngredients/> /> {/*Update ingredients page */}
+                        <Route path="/ingredients/update/" element= <UpdateIngredients/> /> {/*Update ingredients page */}
 
-                        
+
                     </Routes>
                 </main>
             </BrowserRouter>
