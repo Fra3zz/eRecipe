@@ -1,6 +1,7 @@
 import {BrowserRouter, Routes, Route, Link} from "react-router-dom"
 import { Home } from "./Home/home"
 import GetIngredients from "./ingredients/IngredientsRequest"
+import UpdateIngredients from "./ingredients/updateIngredients"
 
 export default function ROUTES() {
 
@@ -10,7 +11,12 @@ export default function ROUTES() {
                 <main>
                     <Routes> 
                         <Route path="/" element = <Home/> />    {/*Home Page*/}
-                        <Route path="/ingredients" element = <GetIngredients/> /> {/* Ingredients Page: Add and View */}
+
+
+                        <Route path="/ingredients/" element = <GetIngredients/> /> {/* Ingredients Page: Add and View */}
+                        <Route path="/ingredients/update" element= <UpdateIngredients/> /> {/*Update ingredients page */}
+
+                        
                     </Routes>
                 </main>
             </BrowserRouter>
