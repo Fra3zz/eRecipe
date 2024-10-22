@@ -36,9 +36,14 @@ else:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 if DEBUG:
-    SECRET_KEY = "I_AM_INSECURE._SERVER_IS_IN_DEBUG_MODE"
+    if os.environ.get("SECRET_KEY"):
+        SECRET_KEY=os.environ.get("SECRET_KEY")
+    else: SECRET_KEY = "I_AM_INSECURE._SERVER_IS_IN_DEBUG_MODE"
 else:
-    SECRET_KEY = get_random_string(length=240)
+    if os.environ.get("SECRET_KEY"):
+        SECRET_KEY=os.environ.get("SECRET_KEY")
+    else:
+        SECRET_KEY = get_random_string(length=240)
     
     
 time_date = datetime.now()
@@ -46,7 +51,7 @@ time_date = datetime.now()
 SECRET_HASH = hashlib.sha256(bytes(f"{SECRET_KEY}", encoding="utf-8")).hexdigest()
 
 
-print(f"\n SECRET_KEY: {SECRET_KEY}\n TIME: {time_date}\n SECRET_KEY_SHA256: {SECRET_HASH}\n")
+print(f"\n TIME: {time_date}\n SECRET_KEY_SHA256: {SECRET_HASH}\n")
 
 
 if DEBUG:
