@@ -32,12 +32,15 @@ export default function GetIngredients() {
       name: newIngredient,
     })
     .then(response => {
+
+      if (response.headers = 201){
       setSuccessMessage('Ingredient added successfully!');
       setIngredients([...ingredients, response.data]);  // Update the list with the new ingredient
-      setNewIngredient('');  // Clear the input field
+      }
+      setNewIngredient('');
     })
     .catch(error => {
-      setError('Failed to add ingredient');
+      setError('Failed to add ingredient or ingredient has already been added');
     });
   };
 
