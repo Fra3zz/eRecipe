@@ -12,7 +12,14 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from django.utils.crypto import get_random_string
+from dotenv import load_dotenv
+import os
+import hashlib
+import json
+from datetime import datetime
+import time
 
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,15 +29,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if bool(int(os.environ.get("DEBUG", 0))) == True:
+    DEBUG = True
+else:
+    DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
 if DEBUG:
-    SECRET_KEY = "SECRET_KEY"
+    SECRET_KEY = "I_AM_INSECURE._SERVER_IS_IN_DEBUG_MODE"
 else:
-    SECRET_KEY = get_random_string(length=120)
+    SECRET_KEY = get_random_string(length=240)
+    
+    
+time_date = datetime.now()
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+SECRET_HASH = hashlib.sha256(bytes(f"{SECRET_KEY}", encoding="utf-8")).hexdigest()
+
+
+print(f"\n SECRET_KEY: {SECRET_KEY}\n TIME: {time_date}\n SECRET_KEY_SHA256: {SECRET_HASH}\n")
+
+
+if DEBUG:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+else:
+    allowed_hosts = os.environ.get("ALLOWED_HOSTS", "")
+    ALLOWED_HOSTS = allowed_hosts.split(",") if allowed_hosts else []
 
 # Application definition
 
@@ -60,12 +83,12 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-#CORS Allowed URLs
-CORS_ALLOWED_ORIGINS = [
-    #React dev default port
-    'http://localhost:5173',  # React app running locally
-    'http://127.0.0.1:5173',  # For safety, also add this if needed
-]
+if DEBUG:
+    CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173']
+else:
+    allowed_hosts = os.environ.get("CORS_ALLOWED_ORIGINS", "")
+    CORS_ALLOWED_ORIGINS = allowed_hosts.split(",") if allowed_hosts else []
+
 
 ROOT_URLCONF = 'server.urls'
 
