@@ -34,13 +34,13 @@ export default function GetIngredients() {
     .then(response => {
 
       if (response.headers = 201){
-      setSuccessMessage('Ingredient added successfully!');
+      alert('Ingredient added successfully!');
       setIngredients([...ingredients, response.data]);  // Update the list with the new ingredient
       }
       setNewIngredient('');
     })
     .catch(error => {
-      setError('Failed to add ingredient or ingredient has already been added');
+      alert('Failed to add ingredient or ingredient has already been added');
     });
   };
 

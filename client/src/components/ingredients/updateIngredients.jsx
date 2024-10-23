@@ -38,9 +38,9 @@ const IngredientManager = () => {
         await axios.delete(`http://127.0.0.1/api/ingredient/${selectedIngredient.id}`);
         setIngredients(ingredients.filter((item) => item.id !== selectedIngredient.id)); // Remove from state
         setSelectedIngredient(null);
-        setMessage(`Ingredient deleted successfully.`);
+        alert(`Ingredient deleted successfully.`);
       } catch (error) {
-        setMessage("Error deleting ingredient. Please try again.");
+        alert("Error deleting ingredient. Please try again.");
         console.error("Error deleting ingredient:", error);
       }
     }
@@ -54,9 +54,9 @@ const IngredientManager = () => {
         setIngredients(ingredients.map((item) =>
           item.id === selectedIngredient.id ? { ...item, name: newName } : item
         )); // Update the name in the state
-        setMessage(`Ingredient updated successfully.`);
+        alert(`Ingredient updated successfully.`);
       } catch (error) {
-        setMessage("Error updating ingredient. Please try again.");
+        alert("Error updating ingredient. Please try again.");
         console.error("Error updating ingredient:", error);
       }
     }
