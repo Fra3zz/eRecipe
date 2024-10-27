@@ -13,6 +13,15 @@ class recipeIngredientSerializer(serializers.ModelSerializer):
         model = RecipeIngredient
         fields = ["recipe", "ingredient", "amount", "id"]  # Including the names for easier identification
         
+class getrRecipeIngredientSerializer(serializers.ModelSerializer):
+    recipeName = serializers.CharField(source="recipe.name", read_only=True)
+    ingredient=serializers.CharField(source="ingredient.name", read_only=True)
+    
+    
+    class Meta:
+        model = RecipeIngredient
+        fields = ["recipeName", "ingredient", "amount", "id"]  # Including the names for easier identification
+        
 class RecipeIngredientUpdateSerializer(serializers.ModelSerializer):
     recipe_name = serializers.CharField(source='recipe.name', read_only=True)
     ingredient_name = serializers.CharField(source='ingredient.name', read_only=True)

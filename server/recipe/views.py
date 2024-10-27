@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Recipe, RecipeIngredient, Ingredient
-from .serailizers import recipeSerializer, recipeIngredientSerializer, RecipeIngredientUpdateSerializer
+from .serailizers import recipeSerializer, recipeIngredientSerializer, RecipeIngredientUpdateSerializer, getrRecipeIngredientSerializer
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
@@ -95,7 +95,7 @@ def getRecipeIngredientsByRecipeNameView(request, recipe_name):
     recipeIngredients = RecipeIngredient.objects.filter(recipe=recipe)
     
     # Serialize the RecipeIngredient objects
-    serializedRecipeIngredients = recipeIngredientSerializer(recipeIngredients, many=True)
+    serializedRecipeIngredients = getrRecipeIngredientSerializer(recipeIngredients, many=True)
     
     # Return the serialized data
     return Response(serializedRecipeIngredients.data, status=status.HTTP_200_OK)
