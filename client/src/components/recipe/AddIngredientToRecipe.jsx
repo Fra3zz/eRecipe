@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Select from "react-select"; // Import React Select
 
 let INGREDIENTS_URL = "http://127.0.0.1/api/ingredient/";
 let RECIPES_URL = "http://127.0.0.1/api/recipe/";
@@ -15,26 +16,34 @@ const AddIngredientToRecipe = () => {
   const [ingredientsList, setIngredientsList] = useState([]); // for ingredient dropdown
   const [recipesList, setRecipesList] = useState([]); // for recipe dropdown
 
+  // Fetch ingredients and recipes on component mount
   useEffect(() => {
-    // Fetch ingredient names and IDs
     axios.get(INGREDIENTS_URL)
       .then(response => setIngredientsList(response.data))
       .catch(error => console.error("Error fetching ingredients:", error));
 
-    // Fetch recipe names and IDs
     axios.get(RECIPES_URL)
       .then(response => setRecipesList(response.data))
       .catch(error => console.error("Error fetching recipes:", error));
   }, []);
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
+  // Handler for ingredient dropdown change
+  const handleIngredientChange = (selectedOption) => {
     setIngredientObject((prev) => ({
       ...prev,
-      [id]: value
+      ingredient: selectedOption ? selectedOption.value : ""
     }));
   };
 
+  // Handler for recipe dropdown change
+  const handleRecipeChange = (selectedOption) => {
+    setIngredientObject((prev) => ({
+      ...prev,
+      recipe: selectedOption ? selectedOption.value : ""
+    }));
+  };
+
+  // Form submission handler
   const postIngredientToRecipe = async (e) => {
     e.preventDefault();
 
@@ -44,51 +53,50 @@ const AddIngredientToRecipe = () => {
         alert("Ingredient added to recipe");
       }
     } catch (error) {
-      alert("Error adding ingredient or ingredient has already been added to the recipe:", error);
+      console.error("Error adding ingredient:", error);
     }
   };
 
   return (
     <div>
       <form onSubmit={postIngredientToRecipe}>
-        {/* Ingredient Dropdown */}
+        {/* Ingredient Dropdown with Search */}
         <label htmlFor="ingredient">Ingredient:</label>
-        <select
+        <Select
           id="ingredient"
-          value={ingredientObject.ingredient}
-          onChange={handleChange}
-        >
-          <option value="">Select an ingredient</option>
-          {ingredientsList.map((ingredient) => (
-            <option key={ingredient.id} value={ingredient.id}>
-              {ingredient.name}
-            </option>
-          ))}
-        </select>
+          options={ingredientsList.map(ingredient => ({
+            value: ingredient.id,
+            label: ingredient.name
+          }))}
+          onChange={handleIngredientChange}
+          placeholder="Select or search for an ingredient"
+          isClearable
+        />
 
+        {/* Amount Input */}
         <label htmlFor="amount">Amount:</label>
         <input
           type="text"
           id="amount"
           value={ingredientObject.amount}
-          onChange={handleChange}
+          onChange={(e) => setIngredientObject({ ...ingredientObject, amount: e.target.value })}
+          required="True"
         />
 
-        {/* Recipe Dropdown */}
+        {/* Recipe Dropdown with Search */}
         <label htmlFor="recipe">Recipe:</label>
-        <select
+        <Select
           id="recipe"
-          value={ingredientObject.recipe}
-          onChange={handleChange}
-        >
-          <option value="">Select a recipe</option>
-          {recipesList.map((recipe) => (
-            <option key={recipe.id} value={recipe.id}>
-              {recipe.name}
-            </option>
-          ))}
-        </select>
+          options={recipesList.map(recipe => ({
+            value: recipe.id,
+            label: recipe.name
+          }))}
+          onChange={handleRecipeChange}
+          placeholder="Select or search for a recipe"
+          isClearable
+        />
 
+        {/* Submit Button */}
         <button type="submit">Submit</button>
       </form>
     </div>
