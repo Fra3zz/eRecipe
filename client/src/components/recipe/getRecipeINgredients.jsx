@@ -30,6 +30,9 @@ const GetRecipeIngredients = () => {
                         
                         Ingredient: {ingredient.ingredient}
 
+                        <br />
+                        Amount: {ingredient.amount}
+
                     </p>
                 ))
             ) : (
