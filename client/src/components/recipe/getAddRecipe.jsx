@@ -1,43 +1,42 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom"; // Import Link for internal routing
 
-const getURL = "http://127.0.0.1/api/recipe/"
-const postURL = getURL
+const getURL = "http://127.0.0.1/api/recipe/";
+const postURL = getURL;
 
 const GetRecipes = () => {
-
     const [recipe, setRecipe] = useState([]);
 
-    useEffect(
-        () => {
-            axios.get(getURL)
-            .then((response) => {
-                return response.data
-            })
-            .then((data) => {
-                setRecipe(data)
-            })
-        }
-    ,[])
+    useEffect(() => {
+        axios.get(getURL)
+            .then((response) => response.data)
+            .then((data) => setRecipe(data))
+            .catch(error => console.error("Error fetching recipes:", error));
+    }, []);
 
     return (
         <div>
-            {
-                recipe.map((rec) => (
-                    <p key={rec.id}>
+            {recipe.map((rec) => (
+                <div key={rec.id}>
+                    <p>
                         Name: {rec.name}
                         <br />
                         Description: {rec.description}
                         <br />
                         Portion Size: {rec.portion_size}
+                        <br />
+                        <Link to={`/recipe/ingredients/${rec.name}`} id={rec.name}>
+                            View {rec.name} Ingredients
+                        </Link>
                     </p>
-                ))
-            }
+                </div>
+            ))}
         </div>
-    )
-}
+    );
+};
 
-export default GetRecipes
+export default GetRecipes;
 
 export const AddRecipe = () => {
     const [newRecipe, setNewRecipe] = useState({
