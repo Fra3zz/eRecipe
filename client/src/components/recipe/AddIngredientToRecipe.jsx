@@ -2,22 +2,29 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 let INGREDIENTS_URL = "http://127.0.0.1/api/ingredient/";
+let RECIPES_URL = "http://127.0.0.1/api/recipe/";
 let POST_URL = "http://127.0.0.1/api/recipe/ingredients/";
 
 const AddIngredientToRecipe = () => {
   const [ingredientObject, setIngredientObject] = useState({
     ingredient: "", // store the ingredient ID here
     amount: "",
-    recipe: ""
+    recipe: "" // store the recipe ID here
   });
 
-  const [ingredientsList, setIngredientsList] = useState([]); // to store fetched ingredients
+  const [ingredientsList, setIngredientsList] = useState([]); // for ingredient dropdown
+  const [recipesList, setRecipesList] = useState([]); // for recipe dropdown
 
   useEffect(() => {
-    // Fetch ingredient names and IDs when component mounts
+    // Fetch ingredient names and IDs
     axios.get(INGREDIENTS_URL)
       .then(response => setIngredientsList(response.data))
       .catch(error => console.error("Error fetching ingredients:", error));
+
+    // Fetch recipe names and IDs
+    axios.get(RECIPES_URL)
+      .then(response => setRecipesList(response.data))
+      .catch(error => console.error("Error fetching recipes:", error));
   }, []);
 
   const handleChange = (e) => {
@@ -37,13 +44,14 @@ const AddIngredientToRecipe = () => {
         alert("Ingredient added to recipe");
       }
     } catch (error) {
-      console.error("Error adding ingredient:", error);
+      alert("Error adding ingredient or ingredient has already been added to the recipe:", error);
     }
   };
 
   return (
     <div>
       <form onSubmit={postIngredientToRecipe}>
+        {/* Ingredient Dropdown */}
         <label htmlFor="ingredient">Ingredient:</label>
         <select
           id="ingredient"
@@ -66,13 +74,20 @@ const AddIngredientToRecipe = () => {
           onChange={handleChange}
         />
 
+        {/* Recipe Dropdown */}
         <label htmlFor="recipe">Recipe:</label>
-        <input
-          type="text"
+        <select
           id="recipe"
           value={ingredientObject.recipe}
           onChange={handleChange}
-        />
+        >
+          <option value="">Select a recipe</option>
+          {recipesList.map((recipe) => (
+            <option key={recipe.id} value={recipe.id}>
+              {recipe.name}
+            </option>
+          ))}
+        </select>
 
         <button type="submit">Submit</button>
       </form>
