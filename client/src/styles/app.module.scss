@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$primaryBackGroundColor: rgb(94, 114, 222);
+
+:root{
+    background-color: $primaryBackGroundColor;
+}
+
+@font-face {
+    font-family: "DancingScript";
+    src: url("./fonts/DancingScript.ttf");
+}
