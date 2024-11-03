@@ -53,7 +53,7 @@ const AddIngredientToRecipe = () => {
         alert("Ingredient added to recipe");
       }
     } catch (error) {
-      console.error("Error adding ingredient:", error);
+      alert("Error adding ingredient or ingredient has already been added to this recipe", error);
     }
   };
 
@@ -73,16 +73,6 @@ const AddIngredientToRecipe = () => {
           isClearable
         />
 
-        {/* Amount Input */}
-        <label htmlFor="amount">Amount:</label>
-        <input
-          type="text"
-          id="amount"
-          value={ingredientObject.amount}
-          onChange={(e) => setIngredientObject({ ...ingredientObject, amount: e.target.value })}
-          required="True"
-        />
-
         {/* Recipe Dropdown with Search */}
         <label htmlFor="recipe">Recipe:</label>
         <Select
@@ -95,6 +85,18 @@ const AddIngredientToRecipe = () => {
           placeholder="Select or search for a recipe"
           isClearable
         />
+
+        {/* Amount Input */}
+        <label htmlFor="amount">Amount:</label>
+        <input
+          type="text"
+          id="amount"
+          value={ingredientObject.amount}
+          onChange={(e) => setIngredientObject({ ...ingredientObject, amount: e.target.value })}
+          required="True"
+        />
+
+        <br />
 
         {/* Submit Button */}
         <button type="submit">Submit</button>
