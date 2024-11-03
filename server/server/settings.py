@@ -55,7 +55,7 @@ print(f"\n TIME: {time_date}\n SECRET_KEY_SHA256: {SECRET_HASH}\n")
 
 
 if DEBUG:
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+    ALLOWED_HOSTS = ["*"]
 else:
     allowed_hosts = os.environ.get("ALLOWED_HOSTS", "")
     ALLOWED_HOSTS = allowed_hosts.split(",") if allowed_hosts else []
@@ -89,7 +89,7 @@ MIDDLEWARE = [
 ]
 
 if DEBUG:
-    CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173']
+    CORS_ALLOW_ALL_ORIGINS = True
 else:
     allowed_hosts = os.environ.get("CORS_ALLOWED_ORIGINS", "")
     CORS_ALLOWED_ORIGINS = allowed_hosts.split(",") if allowed_hosts else []
