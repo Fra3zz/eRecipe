@@ -3,27 +3,40 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 const NavBar = () => {
     return (
-        <nav className="navbar">
-            <ul className="nav">
-                <li className="nav-item dropdown">
-                    <a 
-                        className="nav-link dropdown-toggle" 
-                        data-bs-toggle="dropdown" 
-                        href="#" 
-                        role="button" 
-                        aria-expanded="false"
-                    >
-                        Menu
-                    </a>
-                    <ul className="dropdown-menu">
-                        <li><a className="dropdown-item" href="/">Home</a></li>
-                        <li><a className="dropdown-item" href="/ingredients/">View/Add Ingredients</a></li>
-                        <li><a className="dropdown-item" href="/ingredients/update/">Update Ingredient</a></li>
-                        <li><a className="dropdown-item" href="/add/recipe/">Add Recipe</a></li>
-                        <li><a className="dropdown-item" href="/add/recipe/ingredient/">Add Ingredient to Recipe</a></li>
+        <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div className="container">
+                <a className="navbar-brand" href="/">eRecipe Book</a>
+                <button 
+                    className="navbar-toggler" 
+                    type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#navbarNavDropdown" 
+                    aria-controls="navbarNavDropdown" 
+                    aria-expanded="false" 
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                            <a className="nav-link" href="/">Home</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/ingredients/">View/Add Ingredients</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/ingredients/update/">Update Ingredient</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/add/recipe/">Add Recipe</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/add/recipe/ingredient/">Add Ingredient to Recipe</a>
+                        </li>
                     </ul>
-                </li>
-            </ul>
+                </div>
+            </div>
         </nav>
     );
 };

@@ -1,12 +1,12 @@
 
 import ROUTES from "./components/routes"
 import NavBar from "./components/NavBar"
-import styles from "./styles/app.module.scss"
+import "./styles/recipe-book.scss"
 
 function App() {
 
   return (
-    <div style={styles}>
+    <div>
       <NavBar/>
       <ROUTES />
     </div>

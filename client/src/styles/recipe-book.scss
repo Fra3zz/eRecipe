@@ -1,0 +1,163 @@
+// Import Bootstrap's SCSS
+@import "./../../node_modules/bootstrap/scss/bootstrap.scss";
+
+// Import Tailwind base, components, and utilities
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Custom Theme Variables
+$primary: #34495e; // Darker blue-gray for navbar background
+$secondary: #f39c12; // Vibrant orange for highlights and accents
+$background-dark: #2c3e50; // Dark background for body and cards
+$background-card: #3b4b5c; // Darker card background with a modern touch
+$text-light: #ffffff; // Bright white for text
+$text-muted: #bdc3c7; // Light gray for muted text
+$hover-accent: #e67e22; // Accent color for hover effects
+
+// Custom Font
+@font-face {
+    font-family: "Caveat";
+    src: url("./fonts/Caveat-VariableFont_wght.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+// Global Styling
+body {
+    @apply bg-[#2c3e50] text-[#ffffff] p-4;
+    font-family: "Caveat", "Helvetica Neue", sans-serif;
+}
+
+// Navbar Styling
+.navbar {
+    background-color: $primary !important;
+    border-bottom: 2px solid $secondary;
+
+    .nav-link {
+        color: $text-muted !important;
+        font-weight: 500;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: $secondary !important;
+        }
+    }
+
+    .navbar-brand {
+        color: $secondary !important;
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+}
+
+// Card Styling for Forms and Recipe Details
+.card {
+    background-color: $background-card;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    margin-bottom: 20px;
+
+    .form-label {
+        color: $text-light;
+        font-size: 1.1rem;
+    }
+
+    .form-control {
+        background-color: #4b5b6b;
+        color: $text-light;
+        border: 1px solid $hover-accent;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 15px;
+
+        &:focus {
+            border-color: $secondary;
+            box-shadow: 0 0 8px $secondary;
+        }
+    }
+
+    button {
+        @apply bg-[#f39c12] text-[#1c2833] font-bold;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        margin-top: 10px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+
+        &:hover {
+            background-color: darken($secondary, 10%);
+            transform: translateY(-2px);
+        }
+    }
+}
+
+// Footer Styling
+.footer {
+    text-align: center;
+    background-color: $primary;
+    padding: 15px;
+    border-radius: 8px;
+    color: $text-light;
+    margin-top: 40px;
+}
+
+// Custom Tailwind Components
+@layer components {
+    .recipe-title {
+        @apply text-3xl font-bold text-[#f39c12] mb-4;
+    }
+
+    .recipe-details {
+        @apply mb-3 text-[#ffffff];
+    }
+
+    .ingredient-item {
+        @apply flex items-center mb-2;
+        color: $text-light;
+
+        &:before {
+            content: "🍽️";
+            margin-right: 8px;
+        }
+    }
+
+    .form-section {
+        @apply mt-6;
+    }
+}
+
+// Additional Custom Styling
+.recipe-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+
+    .recipe-card {
+        @apply bg-[#3b4b5c] rounded-lg shadow-lg p-6;
+        border: 1px solid lighten($background-card, 5%);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+    }
+}
+
+// Responsive Styling
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    button {
+        padding: 10px 20px;
+    }
+}

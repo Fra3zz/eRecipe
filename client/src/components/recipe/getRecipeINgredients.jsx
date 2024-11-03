@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import "./../../styles/recipe-book.scss";
 
 const baseUrl = "http://127.0.0.1/api/recipe/ingredients/";
 
 const GetRecipeIngredients = () => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
-    const { recipeName } = useParams();  // Get recipeName from URL parameters
+    const { recipeName } = useParams();
 
     useEffect(() => {
         const fetchIngredients = async () => {
             try {
-                const response = await axios.get(`${baseUrl}${recipeName}`); 
-                setRecipeIngredients(response.data); 
+                const response = await axios.get(`${baseUrl}${recipeName}`);
+                setRecipeIngredients(response.data);
             } catch (error) {
                 console.error("Error fetching ingredients:", error);
             }
@@ -22,18 +23,18 @@ const GetRecipeIngredients = () => {
     }, [recipeName]);
 
     return (
-        <div>
+        <div className="card p-4">
             {recipeIngredients.length > 0 ? (
                 recipeIngredients.map((ingredient, index) => (
-                    <p key={ingredient.recipeName}>Name: {ingredient.recipeName}
-                        <br />
-                        
-                        Ingredient: {ingredient.ingredient}
-
-                        <br />
-                        Amount: {ingredient.amount}
-
-                    </p>
+                    <div key={index} className="mb-2">
+                        <p>
+                            <strong>Name:</strong> {ingredient.recipeName}
+                            <br />
+                            <strong>Ingredient:</strong> {ingredient.ingredient}
+                            <br />
+                            <strong>Amount:</strong> {ingredient.amount}
+                        </p>
+                    </div>
                 ))
             ) : (
                 <p>No ingredients found for this recipe.</p>
