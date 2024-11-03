@@ -14,6 +14,7 @@ $background-card: #3b4b5c; // Darker card background with a modern touch
 $text-light: #ffffff; // Bright white for text
 $text-muted: #bdc3c7; // Light gray for muted text
 $hover-accent: #e67e22; // Accent color for hover effects
+$formINputBackground: #f39d129d;
 
 // Custom Font
 @font-face {
@@ -66,7 +67,7 @@ body {
     }
 
     .form-control {
-        background-color: #4b5b6b;
+        background-color: $formINputBackground;
         color: $text-light;
         border: 1px solid $hover-accent;
         border-radius: 8px;
