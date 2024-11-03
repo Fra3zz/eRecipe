@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./server  # Path to your Django project
+      dockerfile: Dockerfile  # Dockerfile used for building the Django container
+    container_name: django_container
+    environment:
+      - DEBUG=0
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+      - CORS_ALLOWED_ORIGINS=http://localhost
+    ports:
+      - "8000:8000"  # Expose port 8000 for Django
+
+  frontend:
+    build:
+      context: ./client  # Path to your React/Vite project
+      dockerfile: Dockerfile  # Dockerfile used for building the frontend container
+    container_name: react_frontend_container
+    environment:
+      - VITE_DOMAIN=http://backend:8000  # Environment variable for the frontend to know the backend URL
+    ports:
+      - "80:80"  # Expose port 80 for users to access the frontend (mapped to port 5173 inside the container)
+    depends_on:
+      - backend
