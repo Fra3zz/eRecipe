@@ -89,6 +89,7 @@ export const AddRecipe = () => {
                         value={newRecipe.name} 
                         onChange={handleInputChange} 
                         required
+                        placeholder="Name"
                     />
                 </div>
                 <div className="mb-3">
@@ -100,6 +101,7 @@ export const AddRecipe = () => {
                         value={newRecipe.description} 
                         onChange={handleInputChange} 
                         required
+                        placeholder="Description"
                     />
                 </div>
                 <div className="mb-3">
@@ -111,6 +113,7 @@ export const AddRecipe = () => {
                         value={newRecipe.portion_size} 
                         onChange={handleInputChange} 
                         required
+                        placeholder="Portion Size (Ex: 3 people)"
                     />
                 </div>
                 <button type="submit" className="btn btn-custom">Submit</button>

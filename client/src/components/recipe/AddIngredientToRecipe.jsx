@@ -91,6 +91,7 @@ const AddIngredientToRecipe = () => {
                         value={ingredientObject.amount}
                         onChange={(e) => setIngredientObject({ ...ingredientObject, amount: e.target.value })}
                         required
+                        placeholder="Amount (Ex: 12oz)"
                     />
                 </div>
                 <button type="submit" className="btn btn-custom">Submit</button>
