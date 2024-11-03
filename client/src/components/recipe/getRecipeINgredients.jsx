@@ -3,9 +3,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./../../styles/recipe-book.scss";
 
-const baseUrl = "http://127.0.0.1/api/recipe/ingredients/";
+const domain = import.meta.env.VITE_DOMAIN;
+const baseUrl = `${domain}/api/recipe/ingredients/`;
+
 
 const GetRecipeIngredients = () => {
+
+
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const { recipeName } = useParams();
 

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./../../styles/recipe-book.scss";
 
+const domain = import.meta.env.VITE_DOMAIN;
+
 const IngredientManager = () => {
     const [ingredients, setIngredients] = useState([]);
     const [selectedIngredient, setSelectedIngredient] = useState(null);
@@ -30,7 +32,7 @@ const IngredientManager = () => {
     const handleDelete = async () => {
         if (selectedIngredient) {
             try {
-                await axios.delete(`http://127.0.0.1/api/ingredient/${selectedIngredient.id}`);
+                await axios.delete(`${domain}/api/ingredient/${selectedIngredient.id}`);
                 setIngredients(ingredients.filter((item) => item.id !== selectedIngredient.id));
                 setSelectedIngredient(null);
                 alert(`Ingredient deleted successfully.`);
@@ -44,7 +46,7 @@ const IngredientManager = () => {
     const handleUpdate = async () => {
         if (selectedIngredient && newName) {
             try {
-                await axios.put(`http://127.0.0.1/api/ingredient/${selectedIngredient.id}`, { name: newName });
+                await axios.put(`${domain}/api/ingredient/${selectedIngredient.id}`, { name: newName });
                 setIngredients(ingredients.map((item) =>
                     item.id === selectedIngredient.id ? { ...item, name: newName } : item
                 ));

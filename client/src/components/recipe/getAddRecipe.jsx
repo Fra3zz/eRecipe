@@ -3,7 +3,10 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./../../styles/recipe-book.scss";
 
-const getURL = "http://127.0.0.1/api/recipe/";
+const domain = import.meta.env.VITE_DOMAIN;
+const getURL = `${domain}/api/recipe/`;
+
+
 const postURL = getURL;
 
 const GetRecipes = () => {

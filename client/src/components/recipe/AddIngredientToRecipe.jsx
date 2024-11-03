@@ -3,9 +3,11 @@ import { useState, useEffect } from "react";
 import Select from "react-select";
 import "./../../styles/recipe-book.scss";
 
-let INGREDIENTS_URL = "http://127.0.0.1/api/ingredient/";
-let RECIPES_URL = "http://127.0.0.1/api/recipe/";
-let POST_URL = "http://127.0.0.1/api/recipe/ingredients/";
+
+const domain = import.meta.env.VITE_DOMAIN;
+let INGREDIENTS_URL = `${domain}/api/ingredient/`;
+let RECIPES_URL = `${domain}/api/recipe/`;
+let POST_URL = `${domain}/api/recipe/ingredients/`;
 
 const AddIngredientToRecipe = () => {
     const [ingredientObject, setIngredientObject] = useState({

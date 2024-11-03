@@ -3,13 +3,15 @@ import IngredientList from "./Ingredients";
 import axios from 'axios';
 import "./../../styles/recipe-book.scss";
 
+const domain = import.meta.env.VITE_DOMAIN;
+
 export default function GetIngredients() {
     const [ingredients, setIngredients] = useState([]);
     const [newIngredient, setNewIngredient] = useState('');
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch("http://127.0.0.1/api/ingredient/")
+        fetch(`${domain}/api/ingredient/`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -27,7 +29,7 @@ export default function GetIngredients() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post("http://127.0.0.1/api/ingredient/", {
+        axios.post(`${domain}/api/ingredient/`, {
             name: newIngredient,
         })
         .then(response => {
