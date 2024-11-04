@@ -1,5 +1,25 @@
+version: '3.8'
+
+networks:
+  app_network:
+    driver: bridge
+
 services:
-  
+  db:
+    image: mysql:8.0  # MySQL image
+    container_name: mysql_erecipe
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=erecipe  # Initial database
+      - MYSQL_USER=django  # Custom user
+      - MYSQL_PASSWORD=CHANGEME  # Password for custom user
+    ports:
+      - "32770:3306"  # Expose port 3306 for MySQL
+    volumes:
+      - mysql_data:/var/lib/mysql  # Volume to persist data
+    networks:
+      - app_network
+
   backend:
     build:
       context: ./server  # Path to your Django project
@@ -9,15 +29,19 @@ services:
       - DEBUG=0
       - ALLOWED_HOSTS=127.0.0.1,localhost
       - CORS_ALLOWED_ORIGINS=http://localhost:81,http://127.0.0.1:81
-      - MYSQL=1
-      - DB_NAME=eRecipe
+      - MYSQL=0
+      - DB_NAME=erecipe
       - USER=django
-      - PWD=CHANGME
-      - DB_HOST=192.168.0.226
-      - DB_PORT=32770
+      - PWD=CHANGEME
+      - DB_HOST=db  # Use 'db', which is the Docker service name
+      - DB_PORT=3306  # Internal MySQL port
     ports:
       - "80:8000"  # Expose port 8000 for Django
-      
+    depends_on:
+      - db
+    networks:
+      - app_network
+
   frontend:
     build:
       context: ./client  # Path to your React/Vite project
@@ -29,6 +53,8 @@ services:
       - "81:80"  # Expose port 80 for users to access the frontend
     depends_on:
       - backend
+    networks:
+      - app_network
 
 volumes:
   mysql_data:
