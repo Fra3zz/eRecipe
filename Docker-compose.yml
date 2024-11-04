@@ -1,17 +1,4 @@
 services:
-
-  db:
-    image: mysql:8.0  # MySQL image
-    container_name: mysql_erecipe
-    environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      - MYSQL_DATABASE=eRecipe  # Initial database
-      - MYSQL_USER=django  # Custom user
-      - MYSQL_PASSWORD=CHANGEME # Password for custom user
-    ports:
-      - "32770:3306"  # Expose port 3306 for MySQL
-    volumes:
-      - mysql_data:/var/lib/mysql  # Volume to persist data
   
   backend:
     build:
@@ -30,9 +17,7 @@ services:
       - DB_PORT=32770
     ports:
       - "80:8000"  # Expose port 8000 for Django
-    depends_on:
-      - db  # Ensure backend starts after the db container
-
+      
   frontend:
     build:
       context: ./client  # Path to your React/Vite project
