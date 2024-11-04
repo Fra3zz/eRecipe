@@ -129,11 +129,11 @@ if bool(int(os.environ.get("MYSQL", 0))) == True:
     DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": f"{db_name}",
-        "USER": f"{user}",
-        "PASSWORD": f"{pwd}",
-        "HOST": f"{host}",
-        "PORT": f"{port}",
+        "NAME": db_name,
+        "USER": user,
+        "PASSWORD": pwd,
+        "HOST": host,
+        "PORT": port,
     }
 }
 else:
