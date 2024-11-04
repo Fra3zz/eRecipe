@@ -1,13 +1,1 @@
-services:
-  db:
-    image: mysql:8.0  # MySQL image
-    container_name: mysql_erecipe
-    environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      - MYSQL_DATABASE=eRecipe  # Initial database
-      - MYSQL_USER=django  # Custom user
-      - MYSQL_PASSWORD=CHANGEME # Password for custom user
-    ports:
-      - "32770:3306"  # Expose port 3306 for MySQL
-    volumes:
-      - mysql_data:/var/lib/mysql  # Volume to persist data
+
