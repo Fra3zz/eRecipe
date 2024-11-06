@@ -12,7 +12,7 @@ const IngredientManager = () => {
     useEffect(() => {
         const fetchIngredients = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1/api/ingredient/");
+                const response = await axios.get(`${domain}/api/ingredient/`);
                 setIngredients(response.data);
             } catch (error) {
                 console.error("Error fetching ingredients:", error);
