@@ -34,5 +34,7 @@ RUN python manage.py collectstatic --noinput || echo "Collectstatic failed, skip
 # Expose the port the app will run on
 EXPOSE 8000
 
+RUN python manage.py makemigrations
+
 # Run migrations and start the Gunicorn server
 CMD ["sh", "-c", "python manage.py migrate && gunicorn server.wsgi:application --bind 0.0.0.0:8000"]
