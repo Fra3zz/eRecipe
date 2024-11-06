@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import Select from "react-select";
 import "./../../styles/recipe-book.scss";
 
-
 const domain = import.meta.env.VITE_DOMAIN;
 let INGREDIENTS_URL = `${domain}/api/ingredient/`;
 let RECIPES_URL = `${domain}/api/recipe/`;
@@ -21,12 +20,18 @@ const AddIngredientToRecipe = () => {
 
     useEffect(() => {
         axios.get(INGREDIENTS_URL)
-            .then(response => setIngredientsList(response.data))
-            .catch(error => console.error("Error fetching ingredients:", error));
+            .then(response => Array.isArray(response.data) ? setIngredientsList(response.data) : setIngredientsList([]))
+            .catch(error => {
+                console.error("Error fetching ingredients:", error);
+                setIngredientsList([]);
+            });
 
         axios.get(RECIPES_URL)
-            .then(response => setRecipesList(response.data))
-            .catch(error => console.error("Error fetching recipes:", error));
+            .then(response => Array.isArray(response.data) ? setRecipesList(response.data) : setRecipesList([]))
+            .catch(error => {
+                console.error("Error fetching recipes:", error);
+                setRecipesList([]);
+            });
     }, []);
 
     const handleIngredientChange = (selectedOption) => {
@@ -51,7 +56,8 @@ const AddIngredientToRecipe = () => {
                 alert("Ingredient added to recipe");
             }
         } catch (error) {
-            alert("Error adding ingredient or ingredient has already been added to this recipe", error);
+            alert("Error adding ingredient or ingredient has already been added to this recipe");
+            console.error("Error:", error);
         }
     };
 
@@ -62,7 +68,7 @@ const AddIngredientToRecipe = () => {
                     <label htmlFor="ingredient" className="form-label">Ingredient:</label>
                     <Select
                         id="ingredient"
-                        options={ingredientsList.map(ingredient => ({
+                        options={(Array.isArray(ingredientsList) ? ingredientsList : []).map(ingredient => ({
                             value: ingredient.id,
                             label: ingredient.name
                         }))}
@@ -75,7 +81,7 @@ const AddIngredientToRecipe = () => {
                     <label htmlFor="recipe" className="form-label">Recipe:</label>
                     <Select
                         id="recipe"
-                        options={recipesList.map(recipe => ({
+                        options={(Array.isArray(recipesList) ? recipesList : []).map(recipe => ({
                             value: recipe.id,
                             label: recipe.name
                         }))}

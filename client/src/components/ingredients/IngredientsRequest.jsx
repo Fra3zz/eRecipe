@@ -11,18 +11,11 @@ export default function GetIngredients() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch(`${domain}/api/ingredient/`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setIngredients(data);
-            })
+        axios.get(`${domain}/api/ingredient/`)
+            .then(response => Array.isArray(response.data) ? setIngredients(response.data) : setIngredients([]))
             .catch(error => {
-                setError(error.message);
+                setError('Error fetching ingredients');
+                console.error(error);
             });
     }, []);
 
@@ -41,13 +34,14 @@ export default function GetIngredients() {
         })
         .catch(error => {
             alert('Failed to add ingredient or ingredient has already been added');
+            console.error(error);
         });
     };
 
     return (
         <div className="card p-4">
             {error && <p className="text-danger">{error}</p>}
-            {ingredients.map((ingredient) => (
+            {(Array.isArray(ingredients) ? ingredients : []).map((ingredient) => (
                 <IngredientList key={ingredient.name} name={ingredient.name} />
             ))}
             <form onSubmit={handleSubmit} className="mt-3">

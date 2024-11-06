@@ -6,7 +6,6 @@ import "./../../styles/recipe-book.scss";
 const domain = import.meta.env.VITE_DOMAIN;
 const getURL = `${domain}/api/recipe/`;
 
-
 const postURL = getURL;
 
 const GetRecipes = () => {
@@ -14,14 +13,17 @@ const GetRecipes = () => {
 
     useEffect(() => {
         axios.get(getURL)
-            .then((response) => response.data)
+            .then((response) => Array.isArray(response.data) ? response.data : [])
             .then((data) => setRecipe(data))
-            .catch(error => console.error("Error fetching recipes:", error));
+            .catch(error => {
+                console.error("Error fetching recipes:", error);
+                setRecipe([]);
+            });
     }, []);
 
     return (
         <div className="row">
-            {recipe.map((rec) => (
+            {(Array.isArray(recipe) ? recipe : []).map((rec) => (
                 <div key={rec.id} className="col-md-6 mb-4">
                     <div className="card p-3">
                         <p>
