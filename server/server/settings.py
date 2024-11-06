@@ -119,12 +119,12 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if bool(int(os.environ.get("MYSQL", 0))) == True:
+if bool(int(os.environ.get("MYSQL", 0))):
     db_name = os.environ.get("DB_NAME", "mydatabase")
-    user = os.environ.get("USER", "mydatabaseuser")
+    user = os.environ.get("DB_USER", "mydatabaseuser")
     pwd = os.environ.get("PWD", "mypassword")
-    host = os.environ.get("DB_HOST", "127.0.0.1")
-    port = os.environ.get("DB_PORT", "5432")
+    host = os.environ.get("DB_HOST", "db")
+    port = os.environ.get("DB_PORT", "3306")
     
     DATABASES = {
     "default": {
