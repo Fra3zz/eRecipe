@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Inject environment variable into Vite's build
-RUN echo "VITE_DOMAIN=$VITE_DOMAIN" > .env
+ENV VITE_DOMAIN="${VITE_DOMAIN}"
 
 # Build the React/Vite app
 RUN npm run build

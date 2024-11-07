@@ -1,25 +1,6 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:8.0
-    container_name: mysql_erecipe
-    environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      - MYSQL_DATABASE=erecipe
-      - MYSQL_USER=django
-      - MYSQL_PASSWORD=CHANGEME
-    ports:
-      - "32770:3306"  # Expose port 3306 for MySQL
-    volumes:
-      - mysql_data:/var/lib/mysql  # Volume to persist data
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-
   backend:
     build:
       context: ./server
@@ -29,7 +10,7 @@ services:
       - DEBUG=0
       - ALLOWED_HOSTS=127.0.0.1,localhost
       - CORS_ALLOWED_ORIGINS=http://localhost:81,http://127.0.0.1:81,http://frontend
-      - MYSQL=1
+      - MYSQL=0
       - DB_NAME=erecipe
       - USER=django
       - PWD=CHANGEME
@@ -37,8 +18,6 @@ services:
       - DB_PORT=3306  # Make sure this matches the MySQL internal port
     ports:
       - "80:8000"  # Expose port 8000 for Django
-    depends_on:
-      - db
 
   frontend:
     build:
