@@ -4,7 +4,7 @@ import GetIngredients from "./ingredients/IngredientsRequest";
 import UpdateIngredients from "./ingredients/updateIngredients";
 import GetRecipes, { AddRecipe } from "./recipe/getAddRecipe";
 import AddIngredientToRecipe from "./recipe/AddIngredientToRecipe";
-import GetRecipeIngredients from "./recipe/getRecipeINgredients";
+import GetRecipeIngredients from "./recipe/getRecipeIngredients";
 
 export default function ROUTES() {
     return (
