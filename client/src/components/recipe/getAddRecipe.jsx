@@ -20,41 +20,44 @@ const GetRecipes = () => {
     }, []);
 
     return (
-        <div className="row">
-            {(Array.isArray(recipe) ? recipe : []).map((rec) => (
-                <div key={rec.id} className="col-md-6 mb-4">
-                    <div className="card p-3">
-                        <p>
-                            <strong>Name:</strong> {rec.name}
-                        </p>
-                        <p>
-                            <strong>Description:</strong><br />
-                            {rec.description ? rec.description.split('\n').map((line, index) => (
-                                <span key={index}>
-                                    {line}
-                                    <br />
-                                </span>
-                            )) : "No description available"}
-                        </p>
-                        <p>
-                            <strong>Instructions:</strong><br />
-                            {rec.instructions ? rec.instructions.split('\n').map((line, index) => (
-                                <span key={index}>
-                                    {line}
-                                    <br />
-                                </span>
-                            )) : "No instructions available"}
-                        </p>
-                        <p>
-                            <strong>Portion Size:</strong> {rec.portion_size}
-                        </p>
-                        <Link to={`/recipe/ingredients/${rec.name}`} id={rec.name} className="btn btn-link p-0">
-                            View {rec.name} Ingredients
-                        </Link>
-                    </div>
+    <div>
+    <div className="row">
+        {(Array.isArray(recipe) ? recipe : []).map((rec) => (
+            <div key={rec.id} className="col-md-6 mb-4">
+                <div className="card p-3">
+                    <p style={{ textAlign: "center", fontWeight:"bold", textWrap:"balance" }}>
+                        <strong>{rec.name}</strong>
+                    </p>
+                    <p>
+                        <strong>Description:</strong><br />
+                        {rec.description ? rec.description.split('\n').map((line, index) => (
+                            <span key={index}>
+                                {line}
+                                <br />
+                            </span>
+                        )) : "No description available"}
+                    </p>
+                    <p>
+                        <strong>Instructions:</strong><br />
+                        {rec.instructions ? rec.instructions.split('\n').map((line, index) => (
+                            <span key={index}>
+                                {line}
+                                <br />
+                            </span>
+                        )) : "No instructions available"}
+                    </p>
+                    <p>
+                        <strong>Portion Size:</strong> {rec.portion_size}
+                    </p>
+                    <Link to={`/recipe/ingredients/${rec.name}`} id={rec.name} className="btn btn-link p-0">
+                        View {rec.name} Ingredients
+                    </Link>
                 </div>
-            ))}
-        </div>
+            </div>
+        ))}
+    </div>
+</div>
+
     );
 };
 
