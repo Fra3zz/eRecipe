@@ -4,6 +4,11 @@ FROM python:3.10-slim
 # Set the working directory in the container
 WORKDIR /app
 
+# Install required system packages for mysqlclient
+RUN apt-get update && \
+    apt-get install -y gcc pkg-config libmariadb-dev && \
+    rm -rf /var/lib/apt/lists/*
+
 # Copy the requirements file to the container
 COPY requirements.txt /app/
 
@@ -29,5 +34,8 @@ RUN python manage.py collectstatic --noinput || echo "Collectstatic failed, skip
 # Expose the port the app will run on
 EXPOSE 8000
 
+COPY start.sh .
+
+
 # Run migrations and start the Gunicorn server
-CMD ["sh", "-c", "python manage.py migrate && gunicorn server.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["sh", "start.sh"]

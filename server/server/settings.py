@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from django.utils.crypto import get_random_string
+from dotenv import load_dotenv
+import os
+import hashlib
+import json
+from datetime import datetime
+import time
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,16 +29,36 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if bool(int(os.environ.get("DEBUG", 0))) == True:
+    DEBUG = True
+else:
+    DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
 if DEBUG:
-    SECRET_KEY = "SECRET_KEY"
+    if os.environ.get("SECRET_KEY"):
+        SECRET_KEY=os.environ.get("SECRET_KEY")
+    else: SECRET_KEY = "I_AM_INSECURE._SERVER_IS_IN_DEBUG_MODE"
 else:
-    SECRET_KEY = get_random_string(length=120)
+    if os.environ.get("SECRET_KEY"):
+        SECRET_KEY=os.environ.get("SECRET_KEY")
+    else:
+        SECRET_KEY = get_random_string(length=240)
+    
+    
+time_date = datetime.now()
 
-ALLOWED_HOSTS = []
+SECRET_HASH = hashlib.sha256(bytes(f"{SECRET_KEY}", encoding="utf-8")).hexdigest()
 
+
+print(f"\n TIME: {time_date}\n SECRET_KEY_SHA256: {SECRET_HASH}\n")
+
+
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+else:
+    allowed_hosts = os.environ.get("ALLOWED_HOSTS", "")
+    ALLOWED_HOSTS = allowed_hosts.split(",") if allowed_hosts else []
 
 # Application definition
 
@@ -42,9 +70,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "rest_framework",
+    'corsheaders',
     "ingrediant",
     "recipe"
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,7 +85,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'server.urls'
 
@@ -80,12 +114,30 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if bool(int(os.environ.get("MYSQL", 0))):
+    db_name = os.environ.get("DB_NAME", "mydatabase")
+    user = os.environ.get("DB_USER", "mydatabaseuser")
+    pwd = os.environ.get("PWD", "mypassword")
+    host = os.environ.get("DB_HOST", "db")
+    port = os.environ.get("DB_PORT", "3306")
+    
+    DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": db_name,
+        "USER": user,
+        "PASSWORD": pwd,
+        "HOST": host,
+        "PORT": port,
     }
 }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -128,3 +180,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Django REST Framework settings
+# Enable Browsable API in development only
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',  # Always use JSONRenderer
+    )
+}
+
+# Add BrowsableAPIRenderer in development
+if DEBUG:
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += (
+        'rest_framework.renderers.BrowsableAPIRenderer',  # Enable in dev mode
+    )
+

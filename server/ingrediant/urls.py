@@ -6,7 +6,7 @@ urlpatterns = [
     path("", getAdd),
     path("<int:pk>", removeUpdate),
     
-    #IngredientsInfo Model API Endpoints
-    path("info", ingredientInfoGetAddView),
-    path("info/<int:pk>", ingredientInfoUpdateView)
+    #IngredientsInfo Model API Endpoints IN DEVELOPMENT
+    #path("info", ingredientInfoGetAddView),
+    #path("info/<int:pk>", ingredientInfoUpdateView)
 ]
