@@ -80,6 +80,13 @@ body {
         }
     }
 
+    .instructions-form-label {
+        color: $text-light;
+        font-size: 1.1rem;
+        min-width: 20px;
+        text-wrap: stable;
+    }
+
     button {
         @apply bg-[#f39c12] text-[#1c2833] font-bold;
         border: none;
@@ -146,6 +153,33 @@ body {
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
         }
     }
+}
+
+// Styling for the expanding instructions input and character counter
+.instructions-input {
+    resize: none; // Disable manual resizing by the user
+    overflow: hidden; // Ensure text stays within the input
+    min-height: 60px;
+    padding: 10px;
+    background-color: $formINputBackground;
+    color: $text-light;
+    border: 1px solid $hover-accent;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    transition: all 0.2s ease;
+
+    &:focus {
+        border-color: $secondary;
+        box-shadow: 0 0 8px $secondary;
+    }
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 0.85rem;
+    color: $text-muted;
+    margin-top: -8px;
+    margin-bottom: 15px;
 }
 
 // Responsive Styling

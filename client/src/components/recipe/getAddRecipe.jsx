@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./../../styles/recipe-book.scss";
 
 const domain = import.meta.env.VITE_DOMAIN;
 const getURL = `${domain}/api/recipe/`;
-
 const postURL = getURL;
 
 const GetRecipes = () => {
@@ -50,8 +49,23 @@ export const AddRecipe = () => {
     const [newRecipe, setNewRecipe] = useState({
         name: "",
         description: "",
-        portion_size: ""
+        portion_size: "",
+        instructions: ""
     });
+    const [charCount, setCharCount] = useState(0);
+
+    const maxChars = 1500; // Set your max character limit here for instructions
+
+    const handleInstructionsChange = (e) => {
+        const value = e.target.value.slice(0, maxChars);
+        setNewRecipe((prev) => ({
+            ...prev,
+            instructions: value
+        }));
+        setCharCount(value.length);
+        e.target.style.height = "auto"; // Reset height to auto before expanding
+        e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height based on content
+    };
 
     const postNewRecipe = async () => {
         try {
@@ -61,8 +75,10 @@ export const AddRecipe = () => {
                 setNewRecipe({
                     name: "",
                     description: "",
-                    portion_size: ""
+                    portion_size: "",
+                    instructions: ""
                 });
+                setCharCount(0);
             }
         } catch (error) {
             console.error("There was an error adding the recipe!", error);
@@ -121,6 +137,22 @@ export const AddRecipe = () => {
                         placeholder="Portion Size (Ex: 3 people)"
                     />
                 </div>
+                <div className="mb-3">
+                    <label htmlFor="instructions" className="form-label">Instructions:</label>
+                    <textarea
+                        id="instructions"
+                        className="form-control instructions-input"
+                        value={newRecipe.instructions}
+                        onChange={handleInstructionsChange}
+                        maxLength={maxChars}
+                        placeholder="Recipe Instructions (Ex: Step 1 Add to bowl)"
+                        rows={1}
+                    />
+                    <div className="char-counter">
+                        {charCount}/{maxChars} characters
+                    </div>
+                </div>
+                
                 <button type="submit" className="btn btn-custom">Submit</button>
             </form>
         </div>
