@@ -60,7 +60,9 @@ const GetRecipeIngredients = () => {
                             padding: "10px",
                             border: "1px solid #ccc",
                             borderRadius: "8px",
-                            backgroundColor: "#f9f9f9",
+                            backgroundColor: checkedIngredients[index] ? "#d3d3d3" : "#f9f9f9",
+                            color: checkedIngredients[index] ? "#666" : "#000",
+                            transition: "background-color 0.3s ease, color 0.3s ease",
                         }}
                     >
                         <input
