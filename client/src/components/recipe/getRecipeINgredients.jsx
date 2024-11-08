@@ -28,12 +28,15 @@ const GetRecipeIngredients = () => {
 
     return (
         <div className="card p-4">
+
+            <h1>
+                Ingredients for <strong>{recipeName}</strong>
+            </h1>
+            <br />
             {recipeIngredients.length > 0 ? (
                 recipeIngredients.map((ingredient, index) => (
                     <div key={index} className="mb-2">
                         <p>
-                            <strong>Name:</strong> {ingredient.recipeName}
-                            <br />
                             <strong>Ingredient:</strong> {ingredient.ingredient}
                             <br />
                             <strong>Amount:</strong> {ingredient.amount}

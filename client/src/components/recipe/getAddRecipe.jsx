@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./../../styles/recipe-book.scss";
 
 const domain = import.meta.env.VITE_DOMAIN;
 const getURL = `${domain}/api/recipe/`;
-const postURL = getURL;
 
 const GetRecipes = () => {
     const [recipe, setRecipe] = useState([]);
@@ -27,15 +26,31 @@ const GetRecipes = () => {
                     <div className="card p-3">
                         <p>
                             <strong>Name:</strong> {rec.name}
-                            <br />
-                            <strong>Description:</strong> {rec.description}
-                            <br />
-                            <strong>Portion Size:</strong> {rec.portion_size}
-                            <br />
-                            <Link to={`/recipe/ingredients/${rec.name}`} id={rec.name} className="btn btn-link p-0">
-                                View {rec.name} Ingredients
-                            </Link>
                         </p>
+                        <p>
+                            <strong>Description:</strong><br />
+                            {rec.description ? rec.description.split('\n').map((line, index) => (
+                                <span key={index}>
+                                    {line}
+                                    <br />
+                                </span>
+                            )) : "No description available"}
+                        </p>
+                        <p>
+                            <strong>Instructions:</strong><br />
+                            {rec.instructions ? rec.instructions.split('\n').map((line, index) => (
+                                <span key={index}>
+                                    {line}
+                                    <br />
+                                </span>
+                            )) : "No instructions available"}
+                        </p>
+                        <p>
+                            <strong>Portion Size:</strong> {rec.portion_size}
+                        </p>
+                        <Link to={`/recipe/ingredients/${rec.name}`} id={rec.name} className="btn btn-link p-0">
+                            View {rec.name} Ingredients
+                        </Link>
                     </div>
                 </div>
             ))}
@@ -53,23 +68,43 @@ export const AddRecipe = () => {
         instructions: ""
     });
     const [charCount, setCharCount] = useState(0);
+    const [scrollPosition, setScrollPosition] = useState(0); // State to store scroll position
+    const instructionsRef = useRef(null);
 
-    const maxChars = 1500; // Set your max character limit here for instructions
+    const maxChars = 500;
 
+    // Function to capture the current scroll position
+    const saveScrollPosition = () => {
+        setScrollPosition(window.scrollY);
+    };
+
+    // Function to restore the saved scroll position
+    const restoreScrollPosition = () => {
+        window.scrollTo({ top: scrollPosition, behavior: "instant" });
+    };
+
+    // Adjust the textarea height and save the scroll position before updating the state
     const handleInstructionsChange = (e) => {
+        saveScrollPosition();
         const value = e.target.value.slice(0, maxChars);
         setNewRecipe((prev) => ({
             ...prev,
             instructions: value
         }));
         setCharCount(value.length);
-        e.target.style.height = "auto"; // Reset height to auto before expanding
-        e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height based on content
+
+        e.target.style.height = "auto"; // Reset height to auto
+        e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height based on scrollHeight
     };
+
+    // Restore scroll position after each render
+    useEffect(() => {
+        restoreScrollPosition();
+    }, [newRecipe]);
 
     const postNewRecipe = async () => {
         try {
-            const response = await axios.post(postURL, newRecipe);
+            const response = await axios.post(getURL, newRecipe);
             if (response.status === 201) {
                 alert("Recipe Added!");
                 setNewRecipe({
@@ -86,12 +121,13 @@ export const AddRecipe = () => {
     };
 
     const handleButtonClick = (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent page jump
         postNewRecipe();
     };
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
+        saveScrollPosition(); // Save scroll position before updating other fields
         setNewRecipe(prevState => ({
             ...prevState,
             [id]: value
@@ -141,6 +177,7 @@ export const AddRecipe = () => {
                     <label htmlFor="instructions" className="form-label">Instructions:</label>
                     <textarea
                         id="instructions"
+                        ref={instructionsRef}
                         className="form-control instructions-input"
                         value={newRecipe.instructions}
                         onChange={handleInstructionsChange}
