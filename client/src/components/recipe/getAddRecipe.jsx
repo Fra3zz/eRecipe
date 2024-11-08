@@ -8,56 +8,123 @@ const getURL = `${domain}/api/recipe/`;
 
 const GetRecipes = () => {
     const [recipe, setRecipe] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredRecipes, setFilteredRecipes] = useState([]);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     useEffect(() => {
         axios.get(getURL)
             .then((response) => Array.isArray(response.data) ? response.data : [])
-            .then((data) => setRecipe(data))
+            .then((data) => {
+                setRecipe(data);
+                setFilteredRecipes(data); // Initialize with full recipe list
+            })
             .catch(error => {
                 console.error("Error fetching recipes:", error);
                 setRecipe([]);
+                setFilteredRecipes([]);
             });
     }, []);
 
+    // Filter recipes based on search query
+    useEffect(() => {
+        const filtered = recipe.filter((rec) =>
+            rec.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredRecipes(filtered);
+    }, [searchQuery, recipe]);
+
+    // Toggle the search bar open/close state without clearing the search query
+    const toggleSearchBar = () => {
+        setIsSearchOpen(!isSearchOpen);
+    };
+
     return (
-    <div>
-    <div className="row">
-        {(Array.isArray(recipe) ? recipe : []).map((rec) => (
-            <div key={rec.id} className="col-md-6 mb-4">
-                <div className="card p-3">
-                    <p style={{ textAlign: "center", fontWeight:"bold", textWrap:"balance" }}>
-                        <strong>{rec.name}</strong>
-                    </p>
-                    <p>
-                        <strong>Description:</strong><br />
-                        {rec.description ? rec.description.split('\n').map((line, index) => (
-                            <span key={index}>
-                                {line}
-                                <br />
-                            </span>
-                        )) : "No description available"}
-                    </p>
-                    <p>
-                        <strong>Instructions:</strong><br />
-                        {rec.instructions ? rec.instructions.split('\n').map((line, index) => (
-                            <span key={index}>
-                                {line}
-                                <br />
-                            </span>
-                        )) : "No instructions available"}
-                    </p>
-                    <p>
-                        <strong>Portion Size:</strong> {rec.portion_size}
-                    </p>
-                    <Link to={`/recipe/ingredients/${rec.name}`} id={rec.name} className="btn btn-link p-0">
-                        View {rec.name} Ingredients
-                    </Link>
+        <div>
+            {/* Left-Aligned Animated Expandable Search Bar */}
+            <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: "20px", alignItems: "center" }}>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        border: "1px solid #ccc",
+                        borderRadius: "25px",
+                        padding: isSearchOpen ? "5px 15px" : "5px",
+                        transition: "all 0.3s ease",
+                        width: isSearchOpen ? "60%" : "40px",
+                        cursor: "pointer",
+                        backgroundColor: isSearchOpen ? "#f9f9f9" : "#e0e0e0",
+                        overflow: "hidden",
+                    }}
+                >
+                    {/* Click on the icon to toggle open/close */}
+                    <span
+                        onClick={toggleSearchBar}
+                        style={{
+                            fontSize: "20px",
+                            color: "#555",
+                            marginRight: isSearchOpen ? "10px" : "0",
+                            transition: "margin-right 0.3s ease",
+                            cursor: "pointer",
+                        }}
+                    >
+                        🔍
+                    </span>
+                    <input
+                        type="text"
+                        placeholder={isSearchOpen ? "Search recipes..." : ""}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onClick={(e) => e.stopPropagation()} // Prevent collapsing when clicking on input
+                        style={{
+                            flex: 1,
+                            padding: "5px",
+                            fontSize: "16px",
+                            border: "none",
+                            outline: "none",
+                            opacity: isSearchOpen ? 1 : 0,
+                            transition: "opacity 0.3s ease, width 0.3s ease",
+                        }}
+                    />
                 </div>
             </div>
-        ))}
-    </div>
-</div>
 
+            <div className="row">
+                {(Array.isArray(filteredRecipes) ? filteredRecipes : []).map((rec) => (
+                    <div key={rec.id} className="col-md-6 mb-4">
+                        <div className="card p-3">
+                            <p style={{ textAlign: "center", fontWeight: "bold", textWrap: "balance" }}>
+                                <strong>{rec.name}</strong>
+                            </p>
+                            <p>
+                                <strong>Description:</strong><br />
+                                {rec.description ? rec.description.split('\n').map((line, index) => (
+                                    <span key={index}>
+                                        {line}
+                                        <br />
+                                    </span>
+                                )) : "No description available"}
+                            </p>
+                            <p>
+                                <strong>Instructions:</strong><br />
+                                {rec.instructions ? rec.instructions.split('\n').map((line, index) => (
+                                    <span key={index}>
+                                        {line}
+                                        <br />
+                                    </span>
+                                )) : "No instructions available"}
+                            </p>
+                            <p>
+                                <strong>Portion Size:</strong> {rec.portion_size}
+                            </p>
+                            <Link to={`/recipe/ingredients/${rec.name}`} id={rec.name} className="btn btn-link p-0">
+                                View {rec.name} Ingredients
+                            </Link>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 };
 
@@ -71,7 +138,7 @@ export const AddRecipe = () => {
         instructions: ""
     });
     const [charCount, setCharCount] = useState(0);
-    const [scrollPosition, setScrollPosition] = useState(0); // State to store scroll position
+    const [scrollPosition, setScrollPosition] = useState(0);
     const instructionsRef = useRef(null);
 
     const maxChars = 500;
@@ -86,7 +153,6 @@ export const AddRecipe = () => {
         window.scrollTo({ top: scrollPosition, behavior: "instant" });
     };
 
-    // Adjust the textarea height and save the scroll position before updating the state
     const handleInstructionsChange = (e) => {
         saveScrollPosition();
         const value = e.target.value.slice(0, maxChars);
@@ -96,11 +162,10 @@ export const AddRecipe = () => {
         }));
         setCharCount(value.length);
 
-        e.target.style.height = "auto"; // Reset height to auto
-        e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height based on scrollHeight
+        e.target.style.height = "auto";
+        e.target.style.height = `${e.target.scrollHeight}px`;
     };
 
-    // Restore scroll position after each render
     useEffect(() => {
         restoreScrollPosition();
     }, [newRecipe]);
@@ -124,13 +189,13 @@ export const AddRecipe = () => {
     };
 
     const handleButtonClick = (e) => {
-        e.preventDefault(); // Prevent page jump
+        e.preventDefault();
         postNewRecipe();
     };
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
-        saveScrollPosition(); // Save scroll position before updating other fields
+        saveScrollPosition();
         setNewRecipe(prevState => ({
             ...prevState,
             [id]: value
