@@ -114,31 +114,32 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if bool(int(os.environ.get("MYSQL", 0))):
-    db_name = os.environ.get("DB_NAME", "mydatabase")
-    user = os.environ.get("DB_USER", "mydatabaseuser")
-    pwd = os.environ.get("PWD", "mypassword")
-    host = os.environ.get("DB_HOST", "db")
-    port = os.environ.get("DB_PORT", "3306")
     
+DB_NAME = os.environ.get("DB_NAME", "mydb")
+DB_USER = os.environ.get("DB_USER", "django")
+DB_PASSWORD = os.environ.get("DB_PASSWORD", "DEFAULT")
+DB_HOST = os.environ.get("DB_HOST", "localhost")
+DB_PORT = os.environ.get("DB_PORT", "3306")
+
+if DEBUG:
     DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": db_name,
-        "USER": user,
-        "PASSWORD": pwd,
-        "HOST": host,
-        "PORT": port,
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "debug_db.sqlite3",
     }
 }
 else:
+    print(f"Connecting to {DB_NAME} at {DB_HOST}:{DB_PORT} with user {DB_USER}")
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": DB_NAME,
+            "USER": DB_USER,
+            "PASSWORD": DB_PASSWORD,
+            "HOST": DB_HOST,
+            "PORT": DB_PORT,
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

@@ -5,9 +5,10 @@ from ingrediant.models import Ingredient
 
 
 class Recipe(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(help_text="Describe how to make the recipe.")
+    name = models.CharField(max_length=255, unique=True)
+    description = models.CharField(help_text="Describe how to make the recipe.", max_length=150, null=True, blank=True)
     portion_size = models.CharField(max_length=100, help_text="Specify the portion size.")
+    instructions = models.CharField(max_length=1500, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set the date and time when the recipe is created.
 
     def __str__(self):
