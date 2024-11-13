@@ -103,7 +103,7 @@ const GetRecipeIngredients = () => {
                                 <strong>Amount:</strong> {ingredient.amount}
                             </p>
                             <button onClick={() => handleAddIngredient(ingredient)}>
-                                Add to Cookie
+                                Add to Shopping List
                             </button>
                         </div>
                     </div>
