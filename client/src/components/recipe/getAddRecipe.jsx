@@ -141,7 +141,7 @@ export const AddRecipe = () => {
     const [scrollPosition, setScrollPosition] = useState(0);
     const instructionsRef = useRef(null);
 
-    const maxChars = 500;
+    const maxChars = 1500;
 
     // Function to capture the current scroll position
     const saveScrollPosition = () => {

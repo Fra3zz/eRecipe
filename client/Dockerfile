@@ -1,5 +1,5 @@
 # Stage 1: Build the React/Vite application
-FROM node:latest AS build
+FROM node:iron-alpine3.19 AS build
 
 WORKDIR /app
 

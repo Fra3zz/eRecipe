@@ -5,7 +5,7 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-    container_name: erecipe_backend
+    container_name: erecipe-backend
     networks:
       - erecipe_network
     links:
@@ -31,7 +31,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_DOMAIN: http://127.0.0.1:80  # Set VITE_DOMAIN as a build argument for Vite
-    container_name: erecipe_frontend
+    container_name: erecipe-frontend
     networks:
       - erecipe_network
     ports:
