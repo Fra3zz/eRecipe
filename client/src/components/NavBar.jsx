@@ -34,6 +34,9 @@ const NavBar = () => {
                         <li className="nav-item">
                             <a className="nav-link" href="/add/recipe/ingredient/">Add Ingredient to Recipe</a>
                         </li>
+                        <li className="nav-item">
+                            <a href="/shoppinglist/" className="nav-link">Shopping List</a>
+                        </li>
                     </ul>
                 </div>
             </div>

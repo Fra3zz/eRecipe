@@ -5,6 +5,7 @@ import UpdateIngredients from "./ingredients/updateIngredients";
 import GetRecipes, { AddRecipe } from "./recipe/getAddRecipe";
 import AddIngredientToRecipe from "./recipe/AddIngredientToRecipe";
 import GetRecipeIngredients from "./recipe/getRecipeIngredients";
+import ViewIngredientCookieList from "./cookies/ViewShoppingList";
 
 export default function ROUTES() {
     return (
@@ -17,6 +18,7 @@ export default function ROUTES() {
                 <Route path="/add/recipe/" element={<AddRecipe />} />
                 <Route path="/add/recipe/ingredient/" element={<AddIngredientToRecipe />} />
                 <Route path="/recipe/ingredients/:recipeName" element={<GetRecipeIngredients />} />
+                <Route path="/shoppinglist/" element={<ViewIngredientCookieList/>}/>
             </Routes>
         </main>
     );
