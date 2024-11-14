@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.10-slim
+FROM python:3.10-bullseye
 
 # Set the working directory in the container
 WORKDIR /app
@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install gunicorn
 
 # Copy the current directory contents into the container
-COPY . /app/
+COPY ./ /app/
 
 # Set environment variables for Django
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -34,8 +34,5 @@ RUN python manage.py collectstatic --noinput || echo "Collectstatic failed, skip
 # Expose the port the app will run on
 EXPOSE 8000
 
-COPY start.sh .
-
-
 # Run migrations and start the Gunicorn server
-CMD ["sh", "start.sh"]
+CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && gunicorn server.wsgi:application --bind 0.0.0.0:8000"]
