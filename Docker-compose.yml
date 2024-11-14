@@ -53,6 +53,8 @@ services:
       test: "ls"
       retries: 0
       start_interval: 10s
+    ports:
+      - "3307:3306"
 networks:
   erecipe_network:
     driver: bridge
