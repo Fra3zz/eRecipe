@@ -35,4 +35,4 @@ RUN python manage.py collectstatic --noinput || echo "Collectstatic failed, skip
 EXPOSE 8000
 
 # Run migrations and start the Gunicorn server
-CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && gunicorn server.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py makemigrations && python manage.py makemigrations recipe && python manage.py makemigrations ingrediant && python manage.py migrate && gunicorn server.wsgi:application --bind 0.0.0.0:8000"]
