@@ -1,6 +1,6 @@
 
 DJANGO_MANAGE = server/manage.py
-VITE_DOMAIN = http://127.0.0.1:88
+DEV_VITE_DOMAIN = http://127.0.0.1:88
 SERVER_DEBUG = 1
 SERVER_BUILD_DOMAIN = https://example.com
 
@@ -14,7 +14,7 @@ ddev:
 
 #Runs vite dev server with localhost env
 ndev:
-	set VITE_DOMAIN = ${VITE_DOMAIN}
+	set VITE_DOMAIN = ${DEV_VITE_DOMAIN}
 	npm --prefix ./client/ run dev
 
 #Runs docker build to make the client and the server container images
@@ -24,5 +24,14 @@ build:
 	docker build -t erecipe-backend ./server/
 
 #Builds the container images user docker-compose with localhost 
-compose:
+dev-compose:
+	set DEBUG = ${SERVER_DEBUG}
+	set VITE_DOMAIN = ${DEV_VITE_DOMAIN}
 	docker-compose up -d
+
+production-compose:
+	set VITE_DOMAIN = ${DEV_VITE_DOMAIN}
+	docker-compose up -d
+
+
+
