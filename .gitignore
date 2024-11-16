@@ -2,3 +2,4 @@
 nginx_webengine
 MYSQL Test.session.sql
 Featers.md
+*.sqlite3
