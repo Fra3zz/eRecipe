@@ -2,7 +2,7 @@
 DJANGO_MANAGE = server/manage.py
 VITE_DOMAIN = http://127.0.0.1:88
 SERVER_DEBUG = 1
-BUILD_DOMAIN = https://example.com
+SERVER_BUILD_DOMAIN = https://example.com
 
 
 #Runs django dev with dev env
@@ -19,7 +19,7 @@ ndev:
 
 #Runs docker build to make the client and the server container images
 build:
-	set VITE_DOMAIN = ${BUILD_DOMAIN}
+	set VITE_DOMAIN = ${SERVER_BUILD_DOMAIN}
 	docker build -t erecipe-frontend ./client/
 	docker build -t erecipe-backend ./server/
 
