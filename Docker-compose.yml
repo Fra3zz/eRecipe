@@ -1,44 +1,7 @@
 version: '3.8'
 
 services:
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: erecipe-backend
-    networks:
-      - erecipe_network
-    links:
-      - db:database
-    environment:
-      - DEBUG=0
-      - ALLOWED_HOSTS=127.0.0.1,localhost
-      - CORS_ALLOWED_ORIGINS=http://localhost:81,http://127.0.0.1:81,http://frontend
-      - DB_NAME=erecipe_database
-      - DB_USER=django
-      - DB_PASSWORD=MYPASSWORD
-      - DB_HOST=database  # Use the service name for container networking
-      - DB_PORT=3306  # Make sure this matches the MySQL internal port
-    ports:
-      - "80:8000"  # Expose port 8000 for Django
-    depends_on:
-      db:
-        condition: service_healthy
 
-  frontend:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-      args:
-        VITE_DOMAIN: http://127.0.0.1:80  # Set VITE_DOMAIN as a build argument for Vite
-    container_name: erecipe-frontend
-    networks:
-      - erecipe_network
-    ports:
-      - "81:80"  # Expose port 80 for users to access the frontend
-    depends_on:
-      - backend
-  
   db:
     image: mysql:latest
     container_name: erecipe_db
@@ -50,11 +13,49 @@ services:
     networks:
       - erecipe_network
     healthcheck:
-      test: "ls"
-      retries: 0
-      start_interval: 10s
+      test: "exit 0"
+      retries: 3
+      start_period: 10s
     ports:
       - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: erecipe-backend
+    networks:
+      - erecipe_network
+    environment:
+      - DEBUG=1
+      - ALLOWED_HOSTS=backend,localhost
+      - DB_NAME=erecipe_database
+      - DB_USER=django
+      - DB_PASSWORD=MYPASSWORD
+      - DB_HOST=db
+      - DB_PORT=3306
+    ports:
+      - "81:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        VITE_DOMAIN: http://0.0.0.0
+    container_name: erecipe-frontend
+    networks:
+      - erecipe_network
+    ports:
+      - "80:80"  # Expose port 80 for users to access the frontend
+    depends_on:
+      - backend
+
 networks:
   erecipe_network:
     driver: bridge
