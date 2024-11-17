@@ -5,7 +5,7 @@ DEV_VITE_DOMAIN = http://0.0.0.0
 SERVER_DEBUG_TRUE = 1
 
 # Variables for setting the backend server url that the frontend should make requests to. 
-BUILD_VITE_DOMAIN = https://example.com
+DOMAIN ?= https://example.com
 BUILD_VITE_DOMAIN_PORT = 80
 
 
@@ -13,7 +13,7 @@ BUILD_VITE_DOMAIN_PORT = 80
 
 #Runs docker build to make the client and the server container images
 build:
-	VITE_DOMAIN=${BUILD_VITE_DOMAIN}:${BUILD_VITE_DOMAIN_PORT}
+	VITE_DOMAIN=${DOMAIN}:${BUILD_VITE_DOMAIN_PORT}
 	docker build -t erecipe-frontend ./client/
 	docker build -t erecipe-backend ./server/
 
