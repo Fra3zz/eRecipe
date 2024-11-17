@@ -2,7 +2,7 @@
 
 DJANGO_MANAGE = server/manage.py
 DEV_VITE_DOMAIN = http://0.0.0.0
-SERVER_DEBUG = 1
+SERVER_DEBUG_TRUE = 1
 
 # Variables for setting the backend server url that the frontend should make requests to. 
 BUILD_VITE_DOMAIN = https://example.com
@@ -19,7 +19,7 @@ build:
 
 #Runs django dev with dev env
 ddev:
-	DEBUG=${SERVER_DEBUG}
+	DEBUG=${SERVER_DEBUG_TRUE}
 	python ${DJANGO_MANAGE} makemigrations
 	python ${DJANGO_MANAGE} migrate
 	python ${DJANGO_MANAGE} runserver 81
