@@ -106,15 +106,6 @@ const GetRecipes = () => {
                                 )) : "No description available"}
                             </p>
                             <p>
-                                <strong>Instructions:</strong><br />
-                                {rec.instructions ? rec.instructions.split('\n').map((line, index) => (
-                                    <span key={index}>
-                                        {line}
-                                        <br />
-                                    </span>
-                                )) : "No instructions available"}
-                            </p>
-                            <p>
                                 <strong>Portion Size:</strong> {rec.portion_size}
                             </p>
                             <Link to={`/recipe/ingredients/${rec.name}`} id={rec.name} className="btn btn-link p-0">

@@ -7,9 +7,11 @@ import "./../../styles/recipe-book.scss";
 
 const domain = import.meta.env.VITE_DOMAIN;
 const baseUrl = `${domain}/api/recipe/ingredients/`;
+const getInstructionsURL = `${domain}/api/recipe/`; // Base URL for instructions
 
 const GetRecipeIngredients = () => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
+    const [recipeInstructions, setRecipeInstructions] = useState(""); // State for instructions
     const [checkedIngredients, setCheckedIngredients] = useState([]);
     const [showConfetti, setShowConfetti] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
@@ -28,7 +30,17 @@ const GetRecipeIngredients = () => {
             }
         };
 
+        const fetchInstructions = async () => {
+            try {
+                const response = await axios.get(`${getInstructionsURL}${recipeName}`);
+                setRecipeInstructions(response.data.instructions); // Assuming response contains 'instructions'
+            } catch (error) {
+                console.error("Error fetching instructions:", error);
+            }
+        };
+
         fetchIngredients();
+        fetchInstructions();
     }, [recipeName]);
 
     // Handle checkbox toggle
@@ -110,6 +122,13 @@ const GetRecipeIngredients = () => {
                 ))
             ) : (
                 <p>No ingredients found for this recipe.</p>
+            )}
+
+            {recipeInstructions && (
+                <div className="instructions">
+                    <h2>Instructions</h2>
+                    <p style={{ whiteSpace: "pre-wrap" }}>{recipeInstructions}</p>
+                </div>
             )}
 
             {showPopup && (
