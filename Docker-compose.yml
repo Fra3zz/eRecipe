@@ -44,10 +44,10 @@ services:
 
   frontend:
     build:
-      context: ./front
+      context: ./client
       dockerfile: Dockerfile
       args:
-        VITE_DOMAIN: http://0.0.0.0
+        VITE_DOMAIN: http://127.0.0.1
     container_name: erecipe-frontend
     networks:
       - erecipe_network
