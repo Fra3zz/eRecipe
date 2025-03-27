@@ -44,7 +44,7 @@ services:
 
   frontend:
     build:
-      context: ./client
+      context: ./front
       dockerfile: Dockerfile
       args:
         VITE_DOMAIN: http://0.0.0.0
@@ -52,7 +52,7 @@ services:
     networks:
       - erecipe_network
     ports:
-      - "80:80"  # Expose port 80 for users to access the frontend
+      - "80:80"
     depends_on:
       - backend
 
