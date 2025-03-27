@@ -5,7 +5,7 @@ DEV_VITE_DOMAIN = http://0.0.0.0
 SERVER_DEBUG_TRUE = 1
 
 # Variables for setting the backend server url that the frontend should make requests to. 
-DOMAIN ?= https://example.com
+DOMAIN ?= https://google.com
 BUILD_VITE_DOMAIN_PORT = 80
 
 
