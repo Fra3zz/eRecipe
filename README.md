@@ -13,3 +13,8 @@ This currently dose not have a login functionality, but it could be implimented.
   - React
 - Containerization
   - Docker
+
+<image src="assets/add_ing_to_list.png"><image/>
+<image src="assets/add_ing.png"><image/>
+<image src="assets/view_recip.png"><image/>
+<image src="assets/view_spic_recip.png"><image/>
